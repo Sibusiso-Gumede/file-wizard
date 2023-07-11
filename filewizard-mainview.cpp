@@ -9,7 +9,7 @@
 
 // member function definitions of the filewizard-mainview class.
 
-FileWizardMainView::FileWizardMainView() : fileList(new QTreeWidget(this)),
+FileWizardMainView::FileWizardMainView(QString workingDir) : fileList(new QTreeWidget(this)),
     fileSystem(new QFileSystemModel(this)), browseButton(new QPushButton("&Browse", this)){
 
     // define properties for the main window.
@@ -22,17 +22,18 @@ FileWizardMainView::FileWizardMainView() : fileList(new QTreeWidget(this)),
     QVBoxLayout* widgetLayout = new QVBoxLayout(this);
     widgetLayout->addWidget(fileList);
     widgetLayout->addWidget(browseButton);
+    setLayout(widgetLayout);
     //fileSystem->setRootPath(QDir::)
 
     // action for setting up the root folder.
-    QAction* browse = new QAction(QIcon("icons/root.png"), "&Browse", this);
+    QAction* browse = new QAction(QIcon(workingDir+"/icons/r.png"), "&Browse", this);
     browseButton->addAction(browse);
 
     // actions to rename, move or delete the file(s).
     QActionGroup* editGroup = new QActionGroup(this);
-    editGroup->addAction(new QAction(QIcon("icons/rename.png"), "&Rename", this));
-    editGroup->addAction(new QAction(QIcon("icons/move.png"), "&Move", this));
-    editGroup->addAction(new QAction(QIcon("icons/delete.png"), "&Delete", this));
+    editGroup->addAction(new QAction(QIcon(workingDir+"/icons/o.png"), "&Rename", this));
+    editGroup->addAction(new QAction(QIcon(workingDir+"/icons/c.png"), "&Move", this));
+    editGroup->addAction(new QAction(QIcon(workingDir+"/icons/x.png"), "&Delete", this));
 
     // action menu.
     QMenu* fileMenu = menuBar()->addMenu("&File");

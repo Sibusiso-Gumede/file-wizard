@@ -10,7 +10,7 @@
 class FileWizardMainView : public QMainWindow {
     Q_OBJECT
 public:
-    FileWizardMainView();
+    FileWizardMainView(QString workingDir);
 private slots:
     void handleAction(QAction *a);
 private:
