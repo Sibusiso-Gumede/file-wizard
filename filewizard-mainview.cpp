@@ -9,25 +9,19 @@
 
 // member function definitions of the filewizard-mainview class.
 
-FileWizardMainView::FileWizardMainView(QString workingDir) : fileList(new QTreeWidget(this)),
+FileWizardMainView::FileWizardMainView(QString workingDir, QWidget* parent) : QDialog(parent), fileList(new QTreeWidget(this)),
     fileSystem(new QFileSystemModel(this)), browseButton(new QPushButton("&Browse", this)){
 
     // define properties for the main window.
     setWindowTitle("File Wizard");
-    setMinimumSize(800, 200);
+    setMinimumSize(800, 600);
     setFont(QFont("Helvetica", 10));
-    browseButton->setAutoDefault(true);
 
     // organize the widgets of the main window in a vertical structure.
-    QVBoxLayout* widgetLayout = new QVBoxLayout(this);
-    widgetLayout->addWidget(fileList);
-    widgetLayout->addWidget(browseButton);
-    setLayout(widgetLayout);
-    //fileSystem->setRootPath(QDir::)
-
-    // action for setting up the root folder.
-    QAction* browse = new QAction(QIcon(workingDir+"/icons/r.png"), "&Browse", this);
-    browseButton->addAction(browse);
+    QVBoxLayout* verticalLayout = new QVBoxLayout(this);
+    verticalLayout->addWidget(fileList);
+    verticalLayout->addWidget(browseButton);
+    setLayout(verticalLayout);
 
     // actions to rename, move or delete the file(s).
     QActionGroup* editGroup = new QActionGroup(this);
@@ -36,13 +30,18 @@ FileWizardMainView::FileWizardMainView(QString workingDir) : fileList(new QTreeW
     editGroup->addAction(new QAction(QIcon(workingDir+"/icons/x.png"), "&Delete", this));
 
     // action menu.
-    QMenu* fileMenu = menuBar()->addMenu("&File");
+    QMenuBar* menu = new QMenuBar(this);
+    QMenu* fileMenu = menu->addMenu("&File");
     fileMenu->addActions(editGroup->actions());
 
-    connect(browse, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
+    connect(browseButton, SIGNAL(clicked()), this, SLOT(popFileDialog()));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
 }
 
 void FileWizardMainView::handleAction(QAction* a){
+
+}
+
+void FileWizardMainView::popFileDialog(){
 
 }
