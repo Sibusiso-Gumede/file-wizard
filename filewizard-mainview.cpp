@@ -5,6 +5,7 @@
 #include <QMenuBar>
 #include <QActionGroup>
 #include <QVBoxLayout>
+#include <QStringList>
 
 // member function definitions of the filewizard-mainview class.
 
@@ -28,9 +29,9 @@ FileWizardMainView::FileWizardMainView(QWidget* parent) : QDialog(parent), fileL
 
     // actions to rename, move or delete the file(s).
     QActionGroup* editGroup = new QActionGroup(this);
-    editGroup->addAction(new QAction(QIcon(workingDir+"/icons/o.png"), "&Rename", this));
-    editGroup->addAction(new QAction(QIcon(workingDir+"/icons/c.png"), "&Move", this));
-    editGroup->addAction(new QAction(QIcon(workingDir+"/icons/x.png"), "&Delete", this));
+    editGroup->addAction(new QAction(QIcon("icons/o.png"), "&Rename", this));
+    editGroup->addAction(new QAction(QIcon("icons/c.png"), "&Move", this));
+    editGroup->addAction(new QAction(QIcon("icons/x.png"), "&Delete", this));
 
     // action menu.
     QMenuBar* menu = new QMenuBar(this);
@@ -46,8 +47,10 @@ void FileWizardMainView::handleAction(QAction* a){
 }
 
 void FileWizardMainView::popFileDialog(){
+    fileDialog->show();
     QString dirName = fileDialog->getExistingDirectory();
-    QDir* rootDirectory = new QDir(dirName);
+    QDir rootDirectory(dirName);
 
     QStringList filters;
+
 }
