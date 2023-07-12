@@ -49,7 +49,7 @@ void FileWizardMainView::handleAction(QAction* a){
 
 void FileWizardMainView::popFileDialog(){
     QString dirName = QFileDialog::getExistingDirectory(this, "Open Root Folder",
-    QDir::currentPath());
+    QDir::homePath());
 
     QDir rootDirectory(dirName);
 
