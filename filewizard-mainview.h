@@ -20,6 +20,5 @@ private:
     QTreeWidget* fileList;
     QFileSystemModel* fileSystem;
     QPushButton* browseButton;
-    QFileDialog* fileDialog;
 };
 #endif // FILEWIZARDMAINVIEW_H
