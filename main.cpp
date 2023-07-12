@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
-    FileWizardMainView window(QDir::currentPath());
+    FileWizardMainView window;
     window.show();
 
     return a.exec();

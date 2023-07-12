@@ -3,19 +3,22 @@
 #include <QFont>
 #include <QMenu>
 #include <QMenuBar>
-#include <QFileDialog>
 #include <QActionGroup>
 #include <QVBoxLayout>
 
 // member function definitions of the filewizard-mainview class.
 
-FileWizardMainView::FileWizardMainView(QString workingDir, QWidget* parent) : QDialog(parent), fileList(new QTreeWidget(this)),
-    fileSystem(new QFileSystemModel(this)), browseButton(new QPushButton("&Browse", this)){
+FileWizardMainView::FileWizardMainView(QWidget* parent) : QDialog(parent), fileList(new QTreeWidget(this)),
+    fileSystem(new QFileSystemModel(this)), browseButton(new QPushButton("&Browse", this)),
+    fileDialog(new QFileDialog(this, "Open Root Folder", QDir::currentPath(), "*.*")){
 
-    // define properties for the main window.
+    // properties for the main window.
     setWindowTitle("File Wizard");
     setMinimumSize(800, 600);
     setFont(QFont("Helvetica", 10));
+
+    // propeties for the widgets.
+    //fileList->setMinimumSize(500, 250);
 
     // organize the widgets of the main window in a vertical structure.
     QVBoxLayout* verticalLayout = new QVBoxLayout(this);
@@ -34,7 +37,7 @@ FileWizardMainView::FileWizardMainView(QString workingDir, QWidget* parent) : QD
     QMenu* fileMenu = menu->addMenu("&File");
     fileMenu->addActions(editGroup->actions());
 
-    connect(browseButton, SIGNAL(clicked()), this, SLOT(popFileDialog()));
+    connect(browseButton, SIGNAL(clicked()), this, SLOT(popFileDialog(workingDir)));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
 }
 
@@ -43,5 +46,8 @@ void FileWizardMainView::handleAction(QAction* a){
 }
 
 void FileWizardMainView::popFileDialog(){
+    QString dirName = fileDialog->getExistingDirectory();
+    QDir* rootDirectory = new QDir(dirName);
 
+    QStringList filters;
 }
