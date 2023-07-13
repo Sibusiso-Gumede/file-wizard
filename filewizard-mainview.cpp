@@ -6,26 +6,37 @@
 #include <QActionGroup>
 #include <QVBoxLayout>
 #include <QStringList>
+#include <QLabel>
 
 // member function definitions of the filewizard-mainview class.
 
 FileWizardMainView::FileWizardMainView(QWidget* parent) : QDialog(parent),
     folderButton(new QPushButton("&Open Folder", this)),
-    editButton(new QPushButton("Edit", this)),
+    editButton(new QPushButton("&Edit", this)),
+    dataField(new QLineEdit(this)),
     informationWidget(new QTextEdit(this)){
 
-    // properties for the main window.
+    QLabel *heading, *stepOne, *stepTwo;
+    heading = new QLabel(this);
+    stepOne = new QLabel(this);
+    stepTwo = new QLabel(this);
+
+    // define properties for the main dialog.
     setWindowTitle("File Wizard");
     setMinimumSize(800, 600);
     setFont(QFont("Helvetica", 10));
 
-    // properties for the widgets.
-    //fileList->setMinimumSize(500, 250);
-    //fileList
+    // define properties for the widgets.
+    heading->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    heading->setText("DO WHAT YOUR NORMAL\nFILE SYSTEM CANNOT DO.");
+    heading->setAlignment(Qt::AlignCenter);
 
     // organize the widgets of the main window in a vertical structure.
-    QVBoxLayout* verticalLayout = new QVBoxLayout(this);
+    QVBoxLayout* verticalLayout = new QVBoxLayout(this);     
     verticalLayout->addWidget(folderButton);
+    verticalLayout->addWidget(editButton);
+    verticalLayout->addWidget(dataField);
+
     verticalLayout->addWidget(informationWidget);
     setLayout(verticalLayout);
 
@@ -38,8 +49,9 @@ FileWizardMainView::FileWizardMainView(QWidget* parent) : QDialog(parent),
 
     // action menu.
     QMenuBar* menu = new QMenuBar(this);
-    QMenu* fileMenu = menu->addMenu("&Edit");
-    fileMenu->addActions(editGroup->actions());
+
+    //QMenu* fileMenu =;
+    //fileMenu->addActions(editGroup->actions());
 
     connect(folderButton, SIGNAL(clicked()), this, SLOT(popFileDialog()));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));

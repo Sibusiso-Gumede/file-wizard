@@ -10,6 +10,7 @@
 #include <QFileDialog>
 #include <QLabel>
 #include <QTextEdit>
+#include <QLineEdit>
 
 class FileWizardMainView : public QDialog {
     Q_OBJECT
@@ -19,7 +20,8 @@ private slots:
     void handleAction(QAction *a);
     void popFileDialog();
 private:
-    QPushButton* folderButton, editButton;
-    QTextEdit* informationWidget;
+    QPushButton *folderButton, *editButton;
+    QLineEdit *dataField;
+    QTextEdit *informationWidget;
 };
 #endif // FILEWIZARDMAINVIEW_H
