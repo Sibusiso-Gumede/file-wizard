@@ -31,21 +31,27 @@ FileWizardMainView::FileWizardMainView(QWidget* parent) : QDialog(parent),
     heading->setText("DO WHAT YOUR NORMAL\nFILE SYSTEM CANNOT DO.");
     heading->setAlignment(Qt::AlignCenter);
 
-    // organize the widgets of the main window in a vertical structure.
-    QVBoxLayout* verticalLayout = new QVBoxLayout(this);     
-    verticalLayout->addWidget(folderButton);
-    verticalLayout->addWidget(editButton);
-    verticalLayout->addWidget(dataField);
+    stepOne->setText("Please select the folder of the objects to be editted.");
+    stepTwo->setText("Please enter a filter to distinguish the objects.\ne.g. '*.zip' or 'cooking.*'");
 
-    verticalLayout->addWidget(informationWidget);
-    setLayout(verticalLayout);
-
-    // actions to rename, move or delete the file(s).
+    // actions to rename, move or delete the object(s).
     QActionGroup* editGroup = new QActionGroup(this);
     editGroup->addAction(new QAction(QIcon("icons/r.png"), "&Rename", this));
     editGroup->addAction(new QAction(QIcon("icons/a.png"), "&Move", this));
     editGroup->addAction(new QAction(QIcon("icons/x.png"), "&Delete", this));
     editGroup->addAction(new QAction(QIcon("icons/c.png"), "&Copy", this));
+
+    // organize the widgets of the main dialog in a vertical structure.
+    QVBoxLayout* verticalLayout = new QVBoxLayout(this);
+    verticalLayout->addWidget(heading);
+    verticalLayout->addWidget(stepOne);
+    verticalLayout->addWidget(folderButton);
+    verticalLayout->addWidget(stepTwo);
+    verticalLayout->addWidget(editButton);
+    verticalLayout->addWidget(dataField);
+
+    verticalLayout->addWidget(informationWidget);
+    setLayout(verticalLayout);
 
     // action menu.
     QMenuBar* menu = new QMenuBar(this);
