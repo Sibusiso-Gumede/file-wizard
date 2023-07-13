@@ -10,8 +10,9 @@
 // member function definitions of the filewizard-mainview class.
 
 FileWizardMainView::FileWizardMainView(QWidget* parent) : QDialog(parent),
-    fileList(new QTreeWidget(this)), fileSystem(new QFileSystemModel(this)),
-    browseButton(new QPushButton("&Browse", this)){
+    folderButton(new QPushButton("&Open Folder", this)),
+    editButton(new QPushButton("Edit", this)),
+    informationWidget(new QTextEdit(this)){
 
     // properties for the main window.
     setWindowTitle("File Wizard");
@@ -24,22 +25,23 @@ FileWizardMainView::FileWizardMainView(QWidget* parent) : QDialog(parent),
 
     // organize the widgets of the main window in a vertical structure.
     QVBoxLayout* verticalLayout = new QVBoxLayout(this);
-    verticalLayout->addWidget(fileList);
-    verticalLayout->addWidget(browseButton);
+    verticalLayout->addWidget(folderButton);
+    verticalLayout->addWidget(informationWidget);
     setLayout(verticalLayout);
 
     // actions to rename, move or delete the file(s).
     QActionGroup* editGroup = new QActionGroup(this);
-    editGroup->addAction(new QAction(QIcon("icons/o.png"), "&Rename", this));
-    editGroup->addAction(new QAction(QIcon("icons/c.png"), "&Move", this));
+    editGroup->addAction(new QAction(QIcon("icons/r.png"), "&Rename", this));
+    editGroup->addAction(new QAction(QIcon("icons/a.png"), "&Move", this));
     editGroup->addAction(new QAction(QIcon("icons/x.png"), "&Delete", this));
+    editGroup->addAction(new QAction(QIcon("icons/c.png"), "&Copy", this));
 
     // action menu.
     QMenuBar* menu = new QMenuBar(this);
-    QMenu* fileMenu = menu->addMenu("&File");
+    QMenu* fileMenu = menu->addMenu("&Edit");
     fileMenu->addActions(editGroup->actions());
 
-    connect(browseButton, SIGNAL(clicked()), this, SLOT(popFileDialog()));
+    connect(folderButton, SIGNAL(clicked()), this, SLOT(popFileDialog()));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
 }
 
