@@ -23,5 +23,6 @@ private:
     QPushButton *folderButton, *editButton;
     QLineEdit *dataField;
     QTextEdit *informationWidget;
+    QFileDialog *fileDialog;
 };
 #endif // FILEWIZARDMAINVIEW_H

@@ -14,8 +14,10 @@ FileWizardMainView::FileWizardMainView(QWidget* parent) : QDialog(parent),
     folderButton(new QPushButton("&Open Folder", this)),
     editButton(new QPushButton("&Edit", this)),
     dataField(new QLineEdit(this)),
-    informationWidget(new QTextEdit(this)){
+    informationWidget(new QTextEdit(this)),
+    fileDialog(new QFileDialog(this, "Select Root Folder", QDir::currentPath())){
 
+    // define/declare local objects.
     QLabel *heading, *stepOne, *stepTwo;
     heading = new QLabel(this);
     stepOne = new QLabel(this);
@@ -41,23 +43,21 @@ FileWizardMainView::FileWizardMainView(QWidget* parent) : QDialog(parent),
     editGroup->addAction(new QAction(QIcon("icons/x.png"), "&Delete", this));
     editGroup->addAction(new QAction(QIcon("icons/c.png"), "&Copy", this));
 
+    // action menu.
+    QMenu* editMenu = new QMenu(this);
+    editMenu->addActions(editGroup->actions());
+    editButton->setMenu(editMenu);
+
     // organize the widgets of the main dialog in a vertical structure.
     QVBoxLayout* verticalLayout = new QVBoxLayout(this);
     verticalLayout->addWidget(heading);
     verticalLayout->addWidget(stepOne);
     verticalLayout->addWidget(folderButton);
     verticalLayout->addWidget(stepTwo);
-    verticalLayout->addWidget(editButton);
     verticalLayout->addWidget(dataField);
-
+    verticalLayout->addWidget(editButton);
     verticalLayout->addWidget(informationWidget);
     setLayout(verticalLayout);
-
-    // action menu.
-    QMenuBar* menu = new QMenuBar(this);
-
-    //QMenu* fileMenu =;
-    //fileMenu->addActions(editGroup->actions());
 
     connect(folderButton, SIGNAL(clicked()), this, SLOT(popFileDialog()));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
@@ -68,8 +68,8 @@ void FileWizardMainView::handleAction(QAction* a){
 }
 
 void FileWizardMainView::popFileDialog(){
-    QString dirName = QFileDialog::getExistingDirectory(this, "Open Root Folder",
-    QDir::homePath());
+    QString dirName = fileDialog->getExistingDirectory();//("Open Root Folder",
+    //QDir::currentPath());
 
     QDir rootDirectory(dirName);
 
