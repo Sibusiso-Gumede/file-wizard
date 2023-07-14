@@ -18,12 +18,13 @@ public:
     FileWizardFrontEnd(QWidget* parent = nullptr);
 private slots:
     void handleAction(QAction *a);
-    void popFileDialog();
+    QString process();
 private:
     QPushButton *folderButton, *editButton;
     QLineEdit *dataField;
     QTextEdit *informationWidget;
     QFileDialog *fileDialog;
     FileWizardBackEnd *data;
+    QString displayObjects(QString l);
 };
 #endif // FILEWIZARDFRONTEND_H

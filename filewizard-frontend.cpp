@@ -12,8 +12,8 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget* parent) : QDialog(parent),
     folderButton(new QPushButton("&Open Folder", this)),
     editButton(new QPushButton("&Edit", this)),
     dataField(new QLineEdit(this)),
-    informationWidget(new QTextEdit(this)){
-
+    informationWidget(new QTextEdit(this))
+{
     // define/declare local objects.
     QLabel *heading, *stepOne, *stepTwo;
     heading = new QLabel(this);
@@ -56,18 +56,26 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget* parent) : QDialog(parent),
     verticalLayout->addWidget(informationWidget);
     setLayout(verticalLayout);
 
-    connect(folderButton, SIGNAL(clicked()), this, SLOT(popFileDialog()));
+    connect(folderButton, SIGNAL(clicked()), this, SLOT(process()));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
 }
 
-void FileWizardFrontEnd::handleAction(QAction* a){
+void FileWizardFrontEnd::handleAction(QAction* a)
+{
 
 }
 
-void FileWizardFrontEnd::popFileDialog(){
-    QString dirName = QFileDialog::getExistingDirectory(0, "Select Root Folder", QDir::currentPath());
-    QDir rootDirectory(dirName);
+QString FileWizardFrontEnd::process()
+{
+    // show the file dialog,
+    // find the objects in the selected directory
+    // and display them.
+    displayObjects(QFileDialog::getExistingDirectory
+                   (0, "Select Root Folder", QDir::currentPath()));
+}
 
-    QStringList filters;
-    filters << dataField
+QString FileWizardFrontEnd::displayObjects(QString l)
+{
+    // display objects on the QTextEdit widget.
+
 }
