@@ -1,9 +1,9 @@
-#include "filewizard-mainview.h"
+#include "filewizard-frontend.h"
 #include <QApplication>
 
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
-    FileWizardMainView window;
+    FileWizardFrontEnd window;
     window.show();
 
     return a.exec();

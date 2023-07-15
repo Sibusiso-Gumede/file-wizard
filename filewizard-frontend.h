@@ -16,15 +16,16 @@ class FileWizardFrontEnd : public QDialog {
     Q_OBJECT
 public:
     FileWizardFrontEnd(QWidget* parent = nullptr);
+    ~FileWizardFrontEnd();
 private slots:
     void handleAction(QAction *a);
-    QString process();
+    void process();
 private:
     QPushButton *folderButton, *editButton;
     QLineEdit *dataField;
     QTextEdit *informationWidget;
     QFileDialog *fileDialog;
     FileWizardBackEnd *data;
-    QString displayObjects(QString l);
+    void displayObjects(QString l);
 };
 #endif // FILEWIZARDFRONTEND_H

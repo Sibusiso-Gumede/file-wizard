@@ -5,16 +5,16 @@ FileWizardBackEnd::FileWizardBackEnd(){
 
 }
 
-QString FileWizardBackEnd::findObjects(QString dirName)
+QString FileWizardBackEnd::findObjects(QString dirName, QString f = "None")
 {
     QDir directory(dirName);
-    objects = directory.entryList(filters);
-
-    if(objects.isEmpty())
-        return (objects << "No folder(s) or file(s) were found.").join("");
+    if(f == "None")
+        objects = directory.entryList();
     else
     {
-        objects.prepend("Objects found in the selected directory:")
-        return objects.join("\n");
+        filters << f;
+        objects = directory.entryList(filters);
     }
+    objects.prepend("Objects found in the selected directory:");
+    return objects.join("\n");
 }

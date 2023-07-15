@@ -46,7 +46,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget* parent) : QDialog(parent),
     editButton->setMenu(editMenu);
 
     // organize the widgets of the main dialog in a vertical structure.
-    QVBoxLayout* verticalLayout = new QVBoxLayout(this);
+    QVBoxLayout *verticalLayout = new QVBoxLayout(this);
     verticalLayout->addWidget(heading);
     verticalLayout->addWidget(stepOne);
     verticalLayout->addWidget(folderButton);
@@ -60,22 +60,37 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget* parent) : QDialog(parent),
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
 }
 
+FileWizardFrontEnd::~FileWizardFrontEnd()
+{
+    delete data;
+}
+
 void FileWizardFrontEnd::handleAction(QAction* a)
 {
 
 }
 
-QString FileWizardFrontEnd::process()
+void FileWizardFrontEnd::process()
 {
     // show the file dialog,
     // find the objects in the selected directory
     // and display them.
-    displayObjects(QFileDialog::getExistingDirectory
-                   (0, "Select Root Folder", QDir::currentPath()));
+    QString rootFolder = QFileDialog::getExistingDirectory
+            (0, "Select Root Folder", QDir::currentPath());
+    data->findObjects(rootFolder);
+    QString buffer;
+    if(!(dataField->text()).isEmpty())
+        buffer = data->findObjects(rootFolder, dataField->text());
+    else
+        buffer = "";
+    displayObjects(buffer);
 }
 
-QString FileWizardFrontEnd::displayObjects(QString l)
+void FileWizardFrontEnd::displayObjects(QString l)
 {
     // display objects on the QTextEdit widget.
-
+    if(!l.isEmpty())
+        informationWidget->setText(l);
+    else
+        informationWidget->setText("No folder(s) or file(s) were found.");
 }
