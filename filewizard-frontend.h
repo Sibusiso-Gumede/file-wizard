@@ -12,14 +12,15 @@
 #include <QLineEdit>
 #include "filewizard-backend.h"
 
-class FileWizardFrontEnd : public QDialog {
+class FileWizardFrontEnd : public QDialog
+{
     Q_OBJECT
 public:
     FileWizardFrontEnd(QWidget* parent = nullptr);
     ~FileWizardFrontEnd();
 private slots:
     void handleAction(QAction *a);
-    void process();
+    void processFolderButton();
 private:
     QPushButton *folderButton, *editButton;
     QLineEdit *dataField;

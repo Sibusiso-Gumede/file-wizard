@@ -56,7 +56,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget* parent) : QDialog(parent),
     verticalLayout->addWidget(informationWidget);
     setLayout(verticalLayout);
 
-    connect(folderButton, SIGNAL(clicked()), this, SLOT(process()));
+    connect(folderButton, SIGNAL(clicked()), this, SLOT(processFolderButton()));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
 }
 
@@ -67,30 +67,28 @@ FileWizardFrontEnd::~FileWizardFrontEnd()
 
 void FileWizardFrontEnd::handleAction(QAction* a)
 {
-
+    // check if the data field 'QLineEdit' has a valid value:
+    // if yes, then proceed to handle the action;
+    // if not, then proceed to display a QMessageBox instructing
+    // the user to enter a valid 'object filter.'
+    //if(!(dataField->text()).isEmpty())
+    //    buffer = data->findObjects(rootFolder, dataField->text());
+    //else
+        //buffer = "";
 }
 
-void FileWizardFrontEnd::process()
+void FileWizardFrontEnd::processFolderButton()
 {
     // show the file dialog,
     // find the objects in the selected directory
-    // and display them.
-    QString rootFolder = QFileDialog::getExistingDirectory
-            (0, "Select Root Folder", QDir::currentPath());
-    data->findObjects(rootFolder);
-    QString buffer;
-    if(!(dataField->text()).isEmpty())
-        buffer = data->findObjects(rootFolder, dataField->text());
-    else
-        buffer = "";
-    displayObjects(buffer);
+    // and display them. 
+    displayObjects(data->findObjects(QFileDialog::getExistingDirectory
+                     (0, "Select Root Folder", QDir::currentPath())));
 }
 
-void FileWizardFrontEnd::displayObjects(QString l)
+void FileWizardFrontEnd::displayObjects(QString objects)
 {
     // display objects on the QTextEdit widget.
-    if(!l.isEmpty())
-        informationWidget->setText(l);
-    else
-        informationWidget->setText("No folder(s) or file(s) were found.");
+    //informationWidget->
+    informationWidget->setPlainText(objects);
 }
