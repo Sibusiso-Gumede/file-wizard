@@ -12,12 +12,16 @@ QString FileWizardBackEnd::findObjects(QString dirName, QString f)
     QDir directory(dirName);
     QStringList objectList;
     QString foundMsg("Objects found in the selected directory:"),
-            notFoundMsg("No file(s)/folder(s) were found in the selected directory:");
+            notFoundMsg("No file(s)/folder(s) were found "
+                        "in the selected directory:");
     // the subcondition structures check whether objects were found
     // and return them. else, they return a not found message.
-    if(f == "None")
+    if(f == NULL)
     {
-        objectList = directory.entryList(QDir::NoDotAndDotDot);
+        // list all objects, but exclude special entries.
+        objectList = directory.entryList(QDir::NoDotAndDotDot |
+                                         QDir::AllDirs |
+                                         QDir::Files);
         if(!objectList.isEmpty())
         {
             objectList.prepend(foundMsg);
@@ -30,7 +34,9 @@ QString FileWizardBackEnd::findObjects(QString dirName, QString f)
     else
     {
         filters << f;
-        objectList = directory.entryList(filters, QDir::NoDotAndDotDot);
+        // list objects that match the filters.
+        objectList = directory.entryList(filters, QDir::Dirs |
+                                         QDir::Files);
         if(!objectList.isEmpty())
         {
             objectList.prepend(foundMsg);

@@ -5,15 +5,19 @@
 #include <QActionGroup>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QWidget>
 
 // member function definitions of the filewizard-frontend class.
 
-FileWizardFrontEnd::FileWizardFrontEnd(QWidget* parent) : QDialog(parent),
+FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
+    QMainWindow(parent),
     folderButton(new QPushButton("&Open Folder", this)),
     editButton(new QPushButton("&Edit", this)),
     dataField(new QLineEdit(this)),
     informationWidget(new QTextEdit(this))
 {
+    data = new FileWizardBackEnd;
+
     // define/declare local objects.
     QLabel *heading, *stepOne, *stepTwo;
     heading = new QLabel(this);
@@ -45,8 +49,9 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget* parent) : QDialog(parent),
     editMenu->addActions(editGroup->actions());
     editButton->setMenu(editMenu);
 
-    // organize the widgets of the main dialog in a vertical structure.
+    QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *verticalLayout = new QVBoxLayout(this);
+    // organize the widgets of the mainwindow in a vertical structure.
     verticalLayout->addWidget(heading);
     verticalLayout->addWidget(stepOne);
     verticalLayout->addWidget(folderButton);
@@ -54,7 +59,9 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget* parent) : QDialog(parent),
     verticalLayout->addWidget(dataField);
     verticalLayout->addWidget(editButton);
     verticalLayout->addWidget(informationWidget);
-    setLayout(verticalLayout);
+
+    centralWidget->setLayout(verticalLayout);
+    setCentralWidget(centralWidget);
 
     connect(folderButton, SIGNAL(clicked()), this, SLOT(processFolderButton()));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));

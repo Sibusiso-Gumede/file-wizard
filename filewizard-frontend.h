@@ -1,7 +1,7 @@
 #ifndef FILEWIZARDFRONTEND_H
 #define FILEWIZARDFRONTEND_H
 
-#include <QDialog>
+#include <QMainWindow>
 #include <QAction>
 #include <QTreeWidget>
 #include <QFileSystemModel>
@@ -12,11 +12,11 @@
 #include <QLineEdit>
 #include "filewizard-backend.h"
 
-class FileWizardFrontEnd : public QDialog
+class FileWizardFrontEnd : public QMainWindow
 {
     Q_OBJECT
 public:
-    FileWizardFrontEnd(QWidget* parent = nullptr);
+    FileWizardFrontEnd(QWidget *parent = nullptr);
     ~FileWizardFrontEnd();
 private slots:
     void handleAction(QAction *a);

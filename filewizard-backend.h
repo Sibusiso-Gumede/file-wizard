@@ -8,7 +8,7 @@ class FileWizardBackEnd
 {
 public:
     FileWizardBackEnd();
-    QString findObjects(QString dirName, QString f = "None");
+    QString findObjects(QString dirName, QString f = NULL);
 
 private:
     QStringList filters, changedObjects, failedObjects;
