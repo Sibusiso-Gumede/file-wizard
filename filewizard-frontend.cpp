@@ -19,10 +19,11 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     data = new FileWizardBackEnd;
 
     // define/declare local objects.
-    QLabel *heading, *stepOne, *stepTwo;
+    QLabel *heading, *stepOne, *stepTwo, *dataFieldLabel;
     heading = new QLabel(this);
     stepOne = new QLabel(this);
     stepTwo = new QLabel(this);
+    dataFieldLabel = new QLabel("&Filter", this);
 
     // define properties for the main dialog.
     setWindowTitle("File Wizard");
@@ -36,6 +37,8 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
 
     stepOne->setText("Please select the folder of the objects to be editted.");
     stepTwo->setText("Please enter a filter to distinguish the objects.\ne.g. '*.zip' or 'cooking.*'");
+
+    dataFieldLabel->setBuddy(dataField);
 
     // actions to rename, move or delete the object(s).
     QActionGroup* editGroup = new QActionGroup(this);
@@ -56,6 +59,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     verticalLayout->addWidget(stepOne);
     verticalLayout->addWidget(folderButton);
     verticalLayout->addWidget(stepTwo);
+    verticalLayout->addWidget(dataFieldLabel);
     verticalLayout->addWidget(dataField);
     verticalLayout->addWidget(editButton);
     verticalLayout->addWidget(informationWidget);
