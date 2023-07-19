@@ -4,6 +4,7 @@
 #include <QMenuBar>
 #include <QActionGroup>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QWidget>
 
@@ -13,19 +14,17 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QMainWindow(parent),
     folderButton(new QPushButton("&Open Folder", this)),
     editButton(new QPushButton("&Edit", this)),
-    dataField(new QLineEdit(this)),
-    informationWidget(new QTextEdit(this))
+    dataField(new QLineEdit("&Filter", this)),
+    informationWidget(new QTextEdit(this)),
+    data(new FileWizardBackEnd())
 {
-    data = new FileWizardBackEnd;
-
     // define/declare local objects.
-    QLabel *heading, *stepOne, *stepTwo, *dataFieldLabel;
+    QLabel *heading, *programInstructions, *dataFieldLabel;
     heading = new QLabel(this);
-    stepOne = new QLabel(this);
-    stepTwo = new QLabel(this);
+    programInstructions = new QLabel(this);
     dataFieldLabel = new QLabel("&Filter", this);
 
-    // define properties for the main dialog.
+    // define properties for the main window.
     setWindowTitle("File Wizard");
     setMinimumSize(800, 600);
     setFont(QFont("Helvetica", 10));
@@ -35,9 +34,21 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     heading->setText("DO WHAT YOUR NORMAL\nFILE SYSTEM CANNOT DO.");
     heading->setAlignment(Qt::AlignCenter);
 
-    stepOne->setText("Please select the folder of the objects to be editted.");
-    stepTwo->setText("Please enter a filter to distinguish the objects.\ne.g. '*.zip' or 'cooking.*'");
+    dataField->setAlignment(Qt::AlignHCenter);
+    dataField->setMaximumSize(100, 30);
+    folderButton->setMaximumSize(100, 30);
+    editButton->setMaximumSize(100, 30);
 
+    // detailed program instructions for the user.
+    programInstructions->setText("PROGRAM INSTRUCTIONS:\n"
+                    "\n1) Select the root folder of the objects you"
+                    "\n   want to edit."
+                    "\n2) Type an extension or a string that is part"
+                    "\n   of the object names to filter them."
+                    "\n   e.g. '*.zip' or 'recipes.*'"
+                    "\n3) Choose an edit option from the 'edit button'.\n");
+
+    // attach a label to the data field.
     dataFieldLabel->setBuddy(dataField);
 
     // actions to rename, move or delete the object(s).
@@ -47,20 +58,26 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     editGroup->addAction(new QAction(QIcon("icons/x.png"), "&Delete", this));
     editGroup->addAction(new QAction(QIcon("icons/c.png"), "&Copy", this));
 
-    // action menu.
+    // action menu to group the different edit options.
     QMenu* editMenu = new QMenu(this);
     editMenu->addActions(editGroup->actions());
     editButton->setMenu(editMenu);
 
+    // the layout format for the mainwindow.
     QWidget *centralWidget = new QWidget(this);
+    QHBoxLayout *horizontalLayout = new QHBoxLayout(this);
     QVBoxLayout *verticalLayout = new QVBoxLayout(this);
-    // organize the widgets of the mainwindow in a vertical structure.
+
+    horizontalLayout->insertSpacing(0, 100);
+    horizontalLayout->insertWidget(1, dataFieldLabel, Qt::AlignCenter);
+    horizontalLayout->insertWidget(2, dataField, Qt::AlignCenter);
+    horizontalLayout->insertSpacing(3, 100);
+
     verticalLayout->addWidget(heading);
-    verticalLayout->addWidget(stepOne);
+    verticalLayout->addWidget(programInstructions);
     verticalLayout->addWidget(folderButton);
-    verticalLayout->addWidget(stepTwo);
-    verticalLayout->addWidget(dataFieldLabel);
     verticalLayout->addWidget(dataField);
+    verticalLayout->addLayout(horizontalLayout);
     verticalLayout->addWidget(editButton);
     verticalLayout->addWidget(informationWidget);
 

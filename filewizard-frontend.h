@@ -3,8 +3,6 @@
 
 #include <QMainWindow>
 #include <QAction>
-#include <QTreeWidget>
-#include <QFileSystemModel>
 #include <QPushButton>
 #include <QFileDialog>
 #include <QLabel>
