@@ -14,7 +14,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QMainWindow(parent),
     folderButton(new QPushButton("&Open Folder", this)),
     editButton(new QPushButton("&Edit", this)),
-    dataField(new QLineEdit("&Filter", this)),
+    dataField(new QLineEdit(this)),
     informationWidget(new QTextEdit(this)),
     data(new FileWizardBackEnd())
 {
@@ -22,7 +22,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QLabel *heading, *programInstructions, *dataFieldLabel;
     heading = new QLabel(this);
     programInstructions = new QLabel(this);
-    dataFieldLabel = new QLabel("&Filter", this);
+    dataFieldLabel = new QLabel("Filter", this);
 
     // define properties for the main window.
     setWindowTitle("File Wizard");
@@ -34,10 +34,15 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     heading->setText("DO WHAT YOUR NORMAL\nFILE SYSTEM CANNOT DO.");
     heading->setAlignment(Qt::AlignCenter);
 
+    dataFieldLabel->setAlignment(Qt::AlignHCenter);
     dataField->setAlignment(Qt::AlignHCenter);
     dataField->setMaximumSize(100, 30);
+    dataField->setPlaceholderText("filter");
     folderButton->setMaximumSize(100, 30);
     editButton->setMaximumSize(100, 30);
+
+    // attach a label to the data field.
+    dataFieldLabel->setBuddy(dataField);
 
     // detailed program instructions for the user.
     programInstructions->setText("PROGRAM INSTRUCTIONS:\n"
@@ -47,9 +52,6 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
                     "\n   of the object names to filter them."
                     "\n   e.g. '*.zip' or 'recipes.*'"
                     "\n3) Choose an edit option from the 'edit button'.\n");
-
-    // attach a label to the data field.
-    dataFieldLabel->setBuddy(dataField);
 
     // actions to rename, move or delete the object(s).
     QActionGroup* editGroup = new QActionGroup(this);
@@ -68,10 +70,14 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QHBoxLayout *horizontalLayout = new QHBoxLayout(this);
     QVBoxLayout *verticalLayout = new QVBoxLayout(this);
 
-    horizontalLayout->insertSpacing(0, 100);
-    horizontalLayout->insertWidget(1, dataFieldLabel, Qt::AlignCenter);
-    horizontalLayout->insertWidget(2, dataField, Qt::AlignCenter);
-    horizontalLayout->insertSpacing(3, 100);
+    // attach a label to the data field.
+    dataFieldLabel->setBuddy(dataField);
+
+    // FIX: align the label with the data field.
+    horizontalLayout->addSpacing(100);
+    horizontalLayout->addWidget(dataFieldLabel, Qt::AlignHCenter);
+    horizontalLayout->addWidget(dataField, Qt::AlignHCenter);
+    horizontalLayout->addSpacing(100);
 
     verticalLayout->addWidget(heading);
     verticalLayout->addWidget(programInstructions);
@@ -94,7 +100,7 @@ FileWizardFrontEnd::~FileWizardFrontEnd()
 }
 
 void FileWizardFrontEnd::handleAction(QAction* a)
-{
+{   // TODO: add routines for the different actions.
     // check if the data field 'QLineEdit' has a valid value:
     // if yes, then proceed to handle the action;
     // if not, then proceed to display a QMessageBox instructing
