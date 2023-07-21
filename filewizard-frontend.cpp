@@ -7,7 +7,7 @@
 #include <QWidget>
 #include <QBoxLayout>
 
-// member function definitions of the filewizard-frontend class.
+// function definitions of the filewizard-frontend class.
 
 FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QMainWindow(parent),
@@ -104,8 +104,10 @@ void FileWizardFrontEnd::handleAction(QAction* a)
     // if yes, then proceed to handle the action;
     // if not, then proceed to display a QMessageBox instructing
     // the user to enter a valid 'object filter.'
-    //if(!(dataField->text()).isEmpty())
-    //    buffer = data->findObjects(rootFolder, dataField->text());
+    QString buffer;
+    buffer = dataField->text();
+    if(!buffer.isEmpty())
+        buffer = data->findObjects(rootFolder, dataField->text());
     //else
         //buffer = "";
 }
@@ -122,6 +124,5 @@ void FileWizardFrontEnd::processFolderButton()
 void FileWizardFrontEnd::displayObjects(QString objects)
 {
     // display objects on the QTextEdit widget.
-    //informationWidget->
     informationWidget->setPlainText(objects);
 }
