@@ -25,6 +25,7 @@ private:
     QTextEdit *informationWidget;
     QFileDialog *fileDialog;
     FileWizardBackEnd *data;
+    char rootFolder[];
     void displayObjects(QString l);
 };
 #endif // FILEWIZARDFRONTEND_H

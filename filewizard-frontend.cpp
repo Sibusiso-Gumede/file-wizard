@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QBoxLayout>
+#include <QMessageBox>
 
 // function definitions of the filewizard-frontend class.
 
@@ -104,12 +105,13 @@ void FileWizardFrontEnd::handleAction(QAction* a)
     // if yes, then proceed to handle the action;
     // if not, then proceed to display a QMessageBox instructing
     // the user to enter a valid 'object filter.'
-    QString buffer;
-    buffer = dataField->text();
-    if(!buffer.isEmpty())
-        buffer = data->findObjects(rootFolder, dataField->text());
+    //QString buffer;
+    //buffer = dataField->text();
+    //if(!buffer.isEmpty())
+    //    buffer = data->findObjects(rootFolder, buffer);
     //else
-        //buffer = "";
+    //    QMessageBox::information(0, "Missing Information", "Please enter a valid filter"
+    //                             " in step 2.");
 }
 
 void FileWizardFrontEnd::processFolderButton()
@@ -117,8 +119,10 @@ void FileWizardFrontEnd::processFolderButton()
     // show the file dialog,
     // find the objects in the selected directory
     // and display them. 
+    //rootFolder = QFileDialog::getExistingDirectory
+    //        (0, "Select Root Folder", QDir::currentPath());
     displayObjects(data->findObjects(QFileDialog::getExistingDirectory
-                     (0, "Select Root Folder", QDir::currentPath())));
+                                     (0, "Select Root Folder", QDir::currentPath())));
 }
 
 void FileWizardFrontEnd::displayObjects(QString objects)
