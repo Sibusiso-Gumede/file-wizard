@@ -16,6 +16,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     editButton(new QPushButton("&Edit", this)),
     dataField(new QLineEdit(this)),
     informationWidget(new QTextEdit(this)),
+    fileDialog(new QFileDialog(this)),
     data(new FileWizardBackEnd())
 {
     // define/declare local objects.
@@ -89,8 +90,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     centralWidget->setLayout(verticalLayout);
     setCentralWidget(centralWidget);
 
-    // TO FIX: folderButton connecting function.
-    connect(folderButton, SIGNAL(clicked()), this, SLOT(handleAction(QAction*)));
+    connect(folderButton, SIGNAL(clicked()), this, SLOT(handleAction()));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
 }
 
@@ -106,15 +106,22 @@ void FileWizardFrontEnd::handleAction(QAction* a)
     // if yes, then proceed to handle the action;
     // if not, then proceed to display a QMessageBox instructing
     // the user to enter a valid 'object filter.'
-    QString buffer = QFileDialog::getExistingDirectory(0, "Root Folder",
-                     QDir::currentPath());
-    //buffer = dataField->text();
-    //if(!buffer.isEmpty())
-    //    buffer = data->findObjects(rootFolder, buffer);
-    //else
-    //    QMessageBox::information(0, "Missing Information", "Please enter a valid filter"
-    //                             " in step 2.");
-    displayObjects(data->findObjects(buffer));
+
+    QString buffer;
+
+    if(a == nullptr)
+    {
+        if(fileDialog->exec())
+            buffer = (fileDialog->selectedFiles()).join("\n");
+        else
+            displayObjects("No directory was selected.");
+    }
+//    else if(a->text() == "&Rename")
+//    {
+
+//    }
+
+
 }
 
 void FileWizardFrontEnd::displayObjects(QString objects)

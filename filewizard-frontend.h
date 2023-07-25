@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <QAction>
 #include <QPushButton>
-#include <QFileDialog>
 #include <QLabel>
+#include <QFileDialog>
 #include <QTextEdit>
 #include <QLineEdit>
 #include "filewizard-backend.h"
