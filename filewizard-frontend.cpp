@@ -16,7 +16,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     editButton(new QPushButton("&Edit", this)),
     dataField(new QLineEdit(this)),
     informationWidget(new QTextEdit(this)),
-    fileDialog(new QFileDialog(this)),
+    fileDialog(new QFileDialog(this, "Root Folder", QDir::currentPath())),
     data(new FileWizardBackEnd())
 {
     // define/declare local objects.
@@ -33,6 +33,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     heading->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     heading->setText("DO WHAT YOUR NORMAL\nFILE SYSTEM CANNOT DO.");
     heading->setAlignment(Qt::AlignCenter);
+    fileDialog->setFileMode(QFileDialog::Directory);
 
     // the sizes of the widgets
     folderButton->setMaximumSize(100, 30);
@@ -110,18 +111,17 @@ void FileWizardFrontEnd::handleAction(QAction* a)
     QString buffer;
 
     if(a == nullptr)
-    {
-        if(fileDialog->exec())
-            buffer = (fileDialog->selectedFiles()).join("\n");
-        else
-            displayObjects("No directory was selected.");
+        buffer = data->findObjects(fileDialog->getExistingDirectory());
+
+    else if(dataField->isModified()){
+        buffer = data->getRootFolder();
+        if(!buffer.isEmpty()){
+            if(a->text() == "Rename"){
+                buffer = data->findObjects(buffer, dataField->text());
+            }
+        }
     }
-//    else if(a->text() == "&Rename")
-//    {
-
-//    }
-
-
+    displayObjects(buffer);
 }
 
 void FileWizardFrontEnd::displayObjects(QString objects)
