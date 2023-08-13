@@ -112,12 +112,29 @@ void FileWizardFrontEnd::handleAction(QAction* a)
 
     if(a == nullptr)
         buffer = data->findObjects(fileDialog->getExistingDirectory());
-
     else if(dataField->isModified()){
-        buffer = data->getRootFolder();
-        if(!buffer.isEmpty()){
-            if(a->text() == "Rename"){
-                buffer = data->findObjects(buffer, dataField->text());
+        while(true){
+            buffer = data->getRootFolder();
+            if(!buffer.isEmpty()){
+                if(a->text() == "Rename"){
+                    buffer = data->findObjects(buffer, dataField->text());
+                    break;
+                }
+                else if(a->text() == "Move"){
+                    buffer = data->findObjects(buffer, dataField->text());
+                    break;
+                }
+                else if(a->text() == "Delete"){
+                    buffer = data->findObjects(buffer, dataField->text());
+                    break;
+                }
+
+            }
+            else{
+                QMessageBox::information(0, "Root Folder", "Please select"
+                " the root folder of the files you want to edit before "
+                "proceeding.");
+                data->findObjects(fileDialog->getExistingDirectory());
             }
         }
     }
