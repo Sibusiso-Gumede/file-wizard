@@ -128,6 +128,10 @@ void FileWizardFrontEnd::handleAction(QAction* a)
                     buffer = data->findObjects(buffer, dataField->text());
                     break;
                 }
+                else if(a->text() == "Copy"){
+                    buffer = data->findObjects(buffer, dataField->text());
+                    break;
+                }
 
             }
             else{

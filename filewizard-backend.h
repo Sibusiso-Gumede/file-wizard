@@ -11,6 +11,7 @@ public:
     FileWizardBackEnd();
     QString findObjects(QString dirName, QString f = NULL);
     QString getRootFolder() const;
+    void performEditOperations();
 
 private:
     QStringList filters, changedObjects, failedObjects;

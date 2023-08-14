@@ -52,3 +52,8 @@ QString FileWizardBackEnd::getRootFolder() const
 {
     return rootFolder.path();
 }
+
+void FileWizardBackEnd::performEditOperations()
+{
+
+}
