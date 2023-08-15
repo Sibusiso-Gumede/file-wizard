@@ -1,8 +1,9 @@
 #include "filewizard-backend.h"
+#include <QFileInfo>
 
 FileWizardBackEnd::FileWizardBackEnd(){}
 
-QString FileWizardBackEnd::findObjects(QString dirName, QString f)
+bool FileWizardBackEnd::objectsFound(QString dirName, QString f)
 {
     // find objects in the selected directory.
     // if no filters are specified, proceed to
@@ -26,10 +27,13 @@ QString FileWizardBackEnd::findObjects(QString dirName, QString f)
         {
             objectList.prepend(foundMsg);
             objects = objectList.join("\n");
-            return  objects;
+            return  true;
         }
         else
-            return notFoundMsg;
+        {
+            objects = notFoundMsg;
+            return false;
+        }
     }
     else
     {
@@ -41,10 +45,13 @@ QString FileWizardBackEnd::findObjects(QString dirName, QString f)
         {
             objectList.prepend(foundMsg);
             objects = objectList.join("\n");
-            return objects;
+            return true;
         }
         else
-            return notFoundMsg;
+        {
+            objects = notFoundMsg;
+            return false;
+        }
     }
 }
 
@@ -53,7 +60,12 @@ QString FileWizardBackEnd::getRootFolder() const
     return rootFolder.path();
 }
 
-void FileWizardBackEnd::performEditOperations()
+QString FileWizardBackEnd::getObjects() const
+{
+    return objects;
+}
+
+void FileWizardBackEnd::performEditOperations(QString files)
 {
 
 }

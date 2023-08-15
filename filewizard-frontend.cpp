@@ -109,36 +109,41 @@ void FileWizardFrontEnd::handleAction(QAction* a)
     // the user to enter a valid 'object filter.'
 
     QString buffer;
+    bool flag = false;
 
     if(a == nullptr)
-        buffer = data->findObjects(fileDialog->getExistingDirectory());
-    else if(dataField->isModified()){
+        flag = data->objectsFound(fileDialog->getExistingDirectory());
+    else if(dataField->isModified() && flag){
         while(true){
             buffer = data->getRootFolder();
             if(!buffer.isEmpty()){
                 if(a->text() == "Rename"){
-                    buffer = data->findObjects(buffer, dataField->text());
+                    flag = data->objectsFound(buffer, dataField->text());
+                    if(flag)
+                    {
+                        data->performEditOperations(buffer);
+
+                    }
                     break;
                 }
                 else if(a->text() == "Move"){
-                    buffer = data->findObjects(buffer, dataField->text());
+
                     break;
                 }
                 else if(a->text() == "Delete"){
-                    buffer = data->findObjects(buffer, dataField->text());
+
                     break;
                 }
                 else if(a->text() == "Copy"){
-                    buffer = data->findObjects(buffer, dataField->text());
+                    data->performEditOperations(buffer);
                     break;
                 }
-
             }
             else{
                 QMessageBox::information(0, "Root Folder", "Please select"
                 " the root folder of the files you want to edit before "
                 "proceeding.");
-                data->findObjects(fileDialog->getExistingDirectory());
+                data->objectsFound(fileDialog->getExistingDirectory());
             }
         }
     }

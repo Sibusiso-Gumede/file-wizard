@@ -9,9 +9,10 @@ class FileWizardBackEnd
 {
 public:
     FileWizardBackEnd();
-    QString findObjects(QString dirName, QString f = NULL);
+    bool objectsFound(QString dirName, QString f = NULL);
     QString getRootFolder() const;
-    void performEditOperations();
+    QString getObjects() const;
+    void performEditOperations(QString files);
 
 private:
     QStringList filters, changedObjects, failedObjects;
