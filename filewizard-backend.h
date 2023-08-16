@@ -9,15 +9,17 @@ class FileWizardBackEnd
 {
 public:
     FileWizardBackEnd();
-    bool objectsFound(QString dirName, QString f = NULL);
+    void findObjects(QString dirName, QString f = NULL);
     QString getRootFolder() const;
     QString getObjects() const;
-    void performEditOperations(QString files);
+    void performEditOperations(QString files, QString action);
+    bool isObjectsFound() const;
 
 private:
     QStringList filters, changedObjects, failedObjects;
     QString objects;
     QDir rootFolder;
+    bool objectsFound;
 };
 
 #endif // FILEWIZARDBACKEND_H

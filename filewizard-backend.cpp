@@ -1,9 +1,12 @@
 #include "filewizard-backend.h"
 #include <QFileInfo>
 
-FileWizardBackEnd::FileWizardBackEnd(){}
+FileWizardBackEnd::FileWizardBackEnd()
+{
+    objectsFound = false;
+}
 
-bool FileWizardBackEnd::objectsFound(QString dirName, QString f)
+void FileWizardBackEnd::findObjects(QString dirName, QString f)
 {
     // find objects in the selected directory.
     // if no filters are specified, proceed to
@@ -27,12 +30,12 @@ bool FileWizardBackEnd::objectsFound(QString dirName, QString f)
         {
             objectList.prepend(foundMsg);
             objects = objectList.join("\n");
-            return  true;
+            objectsFound = true;
         }
         else
         {
-            objects = notFoundMsg;
-            return false;
+            objectsFound = false;
+            objects = notFoundMsg;          
         }
     }
     else
@@ -45,12 +48,12 @@ bool FileWizardBackEnd::objectsFound(QString dirName, QString f)
         {
             objectList.prepend(foundMsg);
             objects = objectList.join("\n");
-            return true;
+            objectsFound = true;
         }
         else
         {
+            objectsFound = false;
             objects = notFoundMsg;
-            return false;
         }
     }
 }
@@ -65,7 +68,25 @@ QString FileWizardBackEnd::getObjects() const
     return objects;
 }
 
-void FileWizardBackEnd::performEditOperations(QString files)
+void FileWizardBackEnd::performEditOperations(QString files, QString action)
 {
+    if(action == "Rename")
+    {
 
+    }
+    else if(action == "Move")
+    {
+
+    }
+    else if(action == "Delete")
+    {
+    }
+    else if(action == "Copy")
+    {
+    }
+}
+
+bool FileWizardBackEnd::isObjectsFound() const
+{
+    return objectsFound;
 }
