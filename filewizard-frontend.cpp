@@ -102,37 +102,27 @@ FileWizardFrontEnd::~FileWizardFrontEnd()
 
 void FileWizardFrontEnd::handleAction(QAction* a)
 {
-    // TODO: add routines for the different actions.
+    // TODO: add routines for the different actions;
     // check if the data field 'QLineEdit' has a valid value:
     // if yes, then proceed to handle the action;
     // if not, then proceed to display a QMessageBox instructing
     // the user to enter a valid 'object filter.'
-
-    QString buffer;
 
     if(a == nullptr)
     {
         data->findObjects(fileDialog->getExistingDirectory());
         displayObjects(data->getObjects());
     }
-    else if(dataField->isModified() && data->isObjectsFound())
+
+    // Under the condition that there's a filter entered in the
+    // dataField and objects are found in the root folder, proceed
+    // to perform the chosen edit operation.
+
+    else if(dataField->isModified())
     {
-        while(true)
-        {
-            buffer = data->getRootFolder();
-            if(!buffer.isEmpty())
-            {
-                data->performEditOperations(buffer, a->text());
-                break;
-            }
-            else
-            {
-                QMessageBox::information(0, "Root Folder", "Please select"
-                " the root folder of the files you want to edit before "
-                "proceeding.");
-                data->findObjects(fileDialog->getExistingDirectory());
-            }
-        }
+        data->findObjects(NULL, dataField->text());
+        if(data->isObjectsFound())
+            data->performEditOperations(a->text());
     }
 }
 

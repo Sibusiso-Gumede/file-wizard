@@ -12,7 +12,6 @@ void FileWizardBackEnd::findObjects(QString dirName, QString f)
     // if no filters are specified, proceed to
     // find all files/folders within the directory.
     // else, find files/folders that match the filters.
-    rootFolder = QDir(dirName);
 
     QStringList objectList;
     QString foundMsg("Objects found in the selected directory:"),
@@ -22,10 +21,12 @@ void FileWizardBackEnd::findObjects(QString dirName, QString f)
     // and return them. else, they return a not found message.
     if(f == NULL)
     {
+         rootFolder = QDir(dirName);
         // list all objects, but exclude special entries.
         objectList = rootFolder.entryList(QDir::NoDotAndDotDot |
                                          QDir::AllDirs |
                                          QDir::Files);
+        //TODO: refactor repeating code.
         if(!objectList.isEmpty())
         {
             objectList.prepend(foundMsg);
@@ -68,8 +69,10 @@ QString FileWizardBackEnd::getObjects() const
     return objects;
 }
 
-void FileWizardBackEnd::performEditOperations(QString files, QString action)
+void FileWizardBackEnd::performEditOperations(QString action)
 {
+
+    foreach(QString filename, files)
     if(action == "Rename")
     {
 
