@@ -102,11 +102,9 @@ FileWizardFrontEnd::~FileWizardFrontEnd()
 
 void FileWizardFrontEnd::handleAction(QAction* a)
 {
-    // TODO: add routines for the different actions;
-    // check if the data field 'QLineEdit' has a valid value:
-    // if yes, then proceed to handle the action;
-    // if not, then proceed to display a QMessageBox instructing
-    // the user to enter a valid 'object filter.'
+    // When the folderButton is clicked, proceed to display
+    // a file dialog and a list of objects found in the chosen
+    // directory.
 
     if(a == nullptr)
     {

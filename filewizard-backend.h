@@ -14,6 +14,7 @@ public:
     QString getObjects() const;
     void performEditOperations(QString action);
     bool isObjectsFound() const;
+    void assignObjects(QStringList objectList);
 
 private:
     QStringList filters, changedObjects, failedObjects;
