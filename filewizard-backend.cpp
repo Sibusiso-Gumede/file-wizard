@@ -25,35 +25,37 @@ void FileWizardBackEnd::findObjects(QString dirName, QString f)
     }
 }
 
-QString FileWizardBackEnd::getRootFolder() const
-{
-    return rootFolder.path();
-}
-
 QString FileWizardBackEnd::getObjects() const
 {
     return objects;
 }
 
+QDir FileWizardBackEnd::getDirectory() const
+{
+    return rootFolder;
+}
+
 void FileWizardBackEnd::performEditOperations(QString action)
-{  
-    foreach(QString filename, getObjects().split("\n"))
+{
+    if(action == "Rename")
     {
-        if(action == "Rename")
+        foreach(QString filename, getObjects().split("\n"))
         {
+            QFileInfo info(getDirectory().absolutePath() + "/" + filename);
 
-        }
-        else if(action == "Move")
-        {
-
-        }
-        else if(action == "Delete")
-        {
-        }
-        else if(action == "Copy")
-        {
         }
     }
+    else if(action == "Move")
+    {
+    }
+    else if(action == "Delete")
+    {
+    }
+    else if(action == "Copy")
+    {
+    }
+
+
 }
 
 bool FileWizardBackEnd::isObjectsFound() const

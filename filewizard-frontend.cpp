@@ -122,6 +122,10 @@ void FileWizardFrontEnd::handleAction(QAction* a)
         if(data->isObjectsFound())
             data->performEditOperations(a->text());
     }
+
+    else
+        QMessageBox::information(0, "Missing Filter", "Please enter a keyword"
+            " in step 2 to filter the objects you intend to modify.");
 }
 
 void FileWizardFrontEnd::displayObjects(QString objects)
