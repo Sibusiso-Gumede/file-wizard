@@ -10,10 +10,9 @@ class FileWizardBackEnd
 public:
     FileWizardBackEnd();
     void findObjects(QString dirName = NULL, QString f = NULL);
-    QString getObjects() const;
     void performEditOperations(QString action);
     bool isObjectsFound() const;
-    void assignObjects(QStringList objectList);
+    QString getObjects() const;
     QDir getDirectory() const;
 
 private:
@@ -21,6 +20,7 @@ private:
     QString objects;
     QDir rootFolder;
     bool objectsFound;
+    void assignObjects(QStringList objectList);
 };
 
 #endif // FILEWIZARDBACKEND_H

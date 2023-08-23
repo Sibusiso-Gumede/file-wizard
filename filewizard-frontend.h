@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QTextEdit>
 #include <QLineEdit>
+#include <QMessageBox>
 #include "filewizard-backend.h"
 
 class FileWizardFrontEnd : public QMainWindow
@@ -17,13 +18,14 @@ public:
     FileWizardFrontEnd(QWidget *parent = nullptr);
     ~FileWizardFrontEnd();
 private slots:
-    void handleAction(QAction *a = nullptr);
+    void handleAction(QAction *action = nullptr);
 private:
     QPushButton *folderButton, *editButton;
     QLineEdit *dataField;
     QTextEdit *informationWidget;
     QFileDialog *fileDialog;
     FileWizardBackEnd *data;
+    QMessageBox *editModeBox;
     void displayObjects(QString l);
 };
 #endif // FILEWIZARDFRONTEND_H

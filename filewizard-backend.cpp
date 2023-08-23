@@ -37,23 +37,7 @@ QDir FileWizardBackEnd::getDirectory() const
 
 void FileWizardBackEnd::performEditOperations(QString action)
 {
-    if(action == "Rename")
-    {
-        foreach(QString filename, getObjects().split("\n"))
-        {
-            QFileInfo info(getDirectory().absolutePath() + "/" + filename);
 
-        }
-    }
-    else if(action == "Move")
-    {
-    }
-    else if(action == "Delete")
-    {
-    }
-    else if(action == "Copy")
-    {
-    }
 
 
 }

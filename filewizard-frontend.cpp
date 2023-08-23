@@ -6,7 +6,6 @@
 #include <QLabel>
 #include <QWidget>
 #include <QBoxLayout>
-#include <QMessageBox>
 
 // function definitions of the filewizard-frontend class.
 
@@ -17,7 +16,8 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     dataField(new QLineEdit(this)),
     informationWidget(new QTextEdit(this)),
     fileDialog(new QFileDialog(this, "Root Folder", QDir::currentPath())),
-    data(new FileWizardBackEnd())
+    data(new FileWizardBackEnd()),
+    editModeBox(new QMessageBox(this))
 {
     // define/declare local objects.
     QLabel *heading, *programInstructions;
@@ -100,13 +100,13 @@ FileWizardFrontEnd::~FileWizardFrontEnd()
     delete data;
 }
 
-void FileWizardFrontEnd::handleAction(QAction* a)
+void FileWizardFrontEnd::handleAction(QAction* action)
 {
     // When the folderButton is clicked, proceed to display
     // a file dialog and a list of objects found in the chosen
     // directory.
 
-    if(a == nullptr)
+    if(action == nullptr)
     {
         data->findObjects(fileDialog->getExistingDirectory());
         displayObjects(data->getObjects());
@@ -120,11 +120,32 @@ void FileWizardFrontEnd::handleAction(QAction* a)
     {
         data->findObjects(NULL, dataField->text());
         if(data->isObjectsFound())
-            data->performEditOperations(a->text());
+        {
+            if(action->text() == "Rename")
+            {
+                editModeBox->question(this, "Operation Mode", "Do you intend to omit"
+                " or insert a substring from the filenames?");
+                foreach(QString filename, data->getObjects().split("\n"))
+                {
+                    QFileInfo info(data->getDirectory().absolutePath()
+                                   + "/" + filename);
+
+                }
+            }
+            else if(action->text() == "Move")
+            {
+            }
+            else if(action->text() == "Delete")
+            {
+            }
+            else if(action->text() == "Copy")
+            {
+            }
+        }
     }
 
     else
-        QMessageBox::information(0, "Missing Filter", "Please enter a keyword"
+        editModeBox->information(this, "Missing Filter", "Please enter a keyword"
             " in step 2 to filter the objects you intend to modify.");
 }
 
