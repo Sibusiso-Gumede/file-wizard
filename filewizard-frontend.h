@@ -20,7 +20,7 @@ public:
 private slots:
     void handleAction(QAction *action = nullptr);
 private:
-    QPushButton *folderButton, *editButton;
+    QPushButton *folderButton, *editButton, *omitButton, *insertButton;
     QLineEdit *dataField;
     QTextEdit *informationWidget;
     QFileDialog *fileDialog;

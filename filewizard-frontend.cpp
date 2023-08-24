@@ -123,8 +123,12 @@ void FileWizardFrontEnd::handleAction(QAction* action)
         {
             if(action->text() == "Rename")
             {
-                editModeBox->question(this, "Operation Mode", "Do you intend to omit"
-                " or insert a substring from the filenames?");
+                editModeBox->setText("Do you intend to omit"
+                                    " or insert a substring from the filenames?");
+                omitButton = editModeBox->addButton(tr("Omit"), QMessageBox::ActionRole);
+                insertButton = editModeBox->addButton(tr("Insert"), QMessageBox::AcceptRole);
+                editModeBox->exec();
+
                 foreach(QString filename, data->getObjects().split("\n"))
                 {
                     QFileInfo info(data->getDirectory().absolutePath()
