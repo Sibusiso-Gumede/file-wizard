@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QBoxLayout>
+#include <QDebug>
 
 // function definitions of the filewizard-frontend class.
 
@@ -13,6 +14,8 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QMainWindow(parent),
     folderButton(new QPushButton("&Open Folder", this)),
     editButton(new QPushButton("&Edit", this)),
+    omitButton(new QPushButton(this)),
+    insertButton(new QPushButton(this)),
     dataField(new QLineEdit(this)),
     informationWidget(new QTextEdit(this)),
     fileDialog(new QFileDialog(this, "Root Folder", QDir::currentPath())),
@@ -118,26 +121,38 @@ void FileWizardFrontEnd::handleAction(QAction* action)
 
     else if(dataField->isModified())
     {
-        data->findObjects(NULL, dataField->text());
+        data->findObjects(data->getRootDirectory().path(), dataField->text());
         if(data->isObjectsFound())
         {
             if(action->text() == "Rename")
             {
+                qDebug("Executing rename block");
                 editModeBox->setText("Do you intend to omit"
                                     " or insert a substring from the filenames?");
                 omitButton = editModeBox->addButton(tr("Omit"), QMessageBox::ActionRole);
-                insertButton = editModeBox->addButton(tr("Insert"), QMessageBox::AcceptRole);
+                insertButton = editModeBox->addButton(tr("Insert"), QMessageBox::ActionRole);
                 editModeBox->exec();
 
-                foreach(QString filename, data->getObjects().split("\n"))
+                if(omitButton == editModeBox->clickedButton())
                 {
-                    QFileInfo info(data->getDirectory().absolutePath()
-                                   + "/" + filename);
 
                 }
+
+                else if(insertButton == editModeBox->clickedButton())
+                {
+
+                }
+
+                //foreach(QString filename, data->getObjects().split("\n"))
+                //{
+                //    QFileInfo info(data->getDirectory().absolutePath()
+                //                   + "/" + filename);
+
+                //}
             }
             else if(action->text() == "Move")
             {
+                qDebug("Executing move block.");
             }
             else if(action->text() == "Delete")
             {

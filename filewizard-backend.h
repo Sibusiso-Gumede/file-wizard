@@ -13,12 +13,12 @@ public:
     void performEditOperations(QString action);
     bool isObjectsFound() const;
     QString getObjects() const;
-    QDir getDirectory() const;
+    QDir getRootDirectory() const;
 
 private:
     QStringList filters, changedObjects, failedObjects;
     QString objects;
-    QDir rootFolder;
+    QDir rootDirectory;
     bool objectsFound;
     void assignObjects(QStringList objectList);
 };

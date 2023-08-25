@@ -1,5 +1,6 @@
 #include "filewizard-backend.h"
 #include <QFileInfo>
+#include <QDebug>
 
 FileWizardBackEnd::FileWizardBackEnd()
 {
@@ -10,17 +11,19 @@ void FileWizardBackEnd::findObjects(QString dirName, QString f)
 {           
     if(f == NULL)
     {
-        rootFolder = QDir(dirName);
+        rootDirectory = QDir(dirName);
         // list all objects, but exclude special entries.
-        assignObjects(rootFolder.entryList(QDir::NoDotAndDotDot |
+        assignObjects(rootDirectory.entryList(QDir::NoDotAndDotDot |
                                          QDir::AllDirs | QDir::Files));
     }
 
     else
     {
+        qDebug("Executing find filtered objects block.");
+
         filters << f;
         // list objects that match the filters.
-        assignObjects(rootFolder.entryList(filters, QDir::Dirs |
+        assignObjects(rootDirectory.entryList(filters, QDir::Dirs |
                                          QDir::Files));
     }
 }
@@ -30,9 +33,9 @@ QString FileWizardBackEnd::getObjects() const
     return objects;
 }
 
-QDir FileWizardBackEnd::getDirectory() const
+QDir FileWizardBackEnd::getRootDirectory() const
 {
-    return rootFolder;
+    return rootDirectory;
 }
 
 void FileWizardBackEnd::performEditOperations(QString action)
