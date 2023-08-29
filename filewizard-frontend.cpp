@@ -121,6 +121,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
 
     else if(dataField->isModified())
     {
+        qDebug() << "Text entered inside the data field " << dataField->text();
         data->findObjects(data->getRootDirectory().path(), dataField->text());
         if(data->isObjectsFound())
         {
