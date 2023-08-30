@@ -22,10 +22,9 @@ void FileWizardBackEnd::findObjects(QString dirName, QString f)
         qDebug() << "Executing find filtered objects block.";
 
         filters << f;
-        // list objects that match the filters.
-        qDebug() << rootDirectory.entryList(filters, QDir::Dirs |
-                                            QDir::Files);
-        //assignObjects();
+        // find objects that match the filters.
+        assignObjects(rootDirectory.entryList(filters, QDir::Dirs |
+                    QDir::Files));
     }
 }
 

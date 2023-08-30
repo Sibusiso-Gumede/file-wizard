@@ -121,13 +121,11 @@ void FileWizardFrontEnd::handleAction(QAction* action)
 
     else if(dataField->isModified())
     {
-        qDebug() << "Text entered inside the data field " << dataField->text();
         data->findObjects(data->getRootDirectory().path(), dataField->text());
         if(data->isObjectsFound())
         {
-            if(action->text() == "Rename")
+            if(action->text() == "&Rename")
             {
-                qDebug("Executing rename block");
                 editModeBox->setText("Do you intend to omit"
                                     " or insert a substring from the filenames?");
                 omitButton = editModeBox->addButton(tr("Omit"), QMessageBox::ActionRole);
