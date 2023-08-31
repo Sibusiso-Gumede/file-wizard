@@ -9,6 +9,7 @@
 #include <QTextEdit>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QDialog>
 #include "filewizard-backend.h"
 
 class FileWizardFrontEnd : public QMainWindow
@@ -26,6 +27,7 @@ private:
     QFileDialog *fileDialog;
     FileWizardBackEnd *data;
     QMessageBox *editModeBox;
+    QDialog *editOperationsDialog;
     void displayObjects(QString l);
 };
 #endif // FILEWIZARDFRONTEND_H

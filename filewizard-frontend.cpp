@@ -20,7 +20,8 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     informationWidget(new QTextEdit(this)),
     fileDialog(new QFileDialog(this, "Root Folder", QDir::currentPath())),
     data(new FileWizardBackEnd()),
-    editModeBox(new QMessageBox(this))
+    editModeBox(new QMessageBox(this)),
+    editOperationsDialog(new QDialog(this))
 {
     // define/declare local objects.
     QLabel *heading, *programInstructions;
@@ -71,7 +72,6 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QBoxLayout *horizontalLayout2 = new QBoxLayout(QBoxLayout::LeftToRight, this);
     QBoxLayout *horizontalLayout3 = new QBoxLayout(QBoxLayout::LeftToRight, this);
 
-    // FIX: align each action widget to the center.
     horizontalLayout1->addSpacing(300);
     horizontalLayout1->addWidget(folderButton, Qt::AlignHCenter);
     horizontalLayout1->addSpacing(300);
@@ -122,6 +122,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
     else if(dataField->isModified())
     {
         data->findObjects(data->getRootDirectory().path(), dataField->text());
+        displayObjects(data->getObjects());
         if(data->isObjectsFound())
         {
             if(action->text() == "&Rename")
@@ -149,14 +150,14 @@ void FileWizardFrontEnd::handleAction(QAction* action)
 
                 //}
             }
-            else if(action->text() == "Move")
+            else if(action->text() == "&Move")
             {
                 qDebug("Executing move block.");
             }
-            else if(action->text() == "Delete")
+            else if(action->text() == "&Delete")
             {
             }
-            else if(action->text() == "Copy")
+            else if(action->text() == "&Copy")
             {
             }
         }
