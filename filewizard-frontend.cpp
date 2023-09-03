@@ -38,6 +38,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     heading->setText("DO WHAT YOUR NORMAL\nFILE SYSTEM CANNOT DO.");
     heading->setAlignment(Qt::AlignCenter);
     fileDialog->setFileMode(QFileDialog::Directory);
+    informationWidget->setReadOnly(true);
 
     // the sizes of the widgets
     folderButton->setMaximumSize(100, 30);
@@ -123,6 +124,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
     {
         data->findObjects(data->getRootDirectory().path(), dataField->text());
         displayObjects(data->getObjects());
+
         if(data->isObjectsFound())
         {
             if(action->text() == "&Rename")
