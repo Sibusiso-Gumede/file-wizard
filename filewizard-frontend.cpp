@@ -134,10 +134,11 @@ void FileWizardFrontEnd::handleAction(QAction* action)
                 omitButton = editModeBox->addButton(tr("Omit"), QMessageBox::ActionRole);
                 insertButton = editModeBox->addButton(tr("Insert"), QMessageBox::ActionRole);
                 editModeBox->exec();
-
+                // TODO: Add a textcursor in the information widget.
                 if(omitButton == editModeBox->clickedButton())
                 {
-
+                    informationWidget->setReadOnly(false);
+                    informationWidget->setTextCursor();
                 }
 
                 else if(insertButton == editModeBox->clickedButton())
