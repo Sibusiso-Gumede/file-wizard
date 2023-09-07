@@ -6,10 +6,12 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QFileDialog>
-#include <QTextEdit>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QDialog>
+#include <QTextEdit>
+#include <QFileSystemModel>
+#include <QTreeView>
 #include "filewizard-backend.h"
 
 class FileWizardFrontEnd : public QMainWindow
@@ -23,11 +25,13 @@ private slots:
 private:
     QPushButton *folderButton, *editButton, *omitButton, *insertButton;
     QLineEdit *dataField;
-    QTextEdit *informationWidget;
     QFileDialog *fileDialog;
     FileWizardBackEnd *data;
     QMessageBox *editModeBox;
     QDialog *editOperationsDialog;
+    QTextEdit *informationWidget;
+    QFileSystemModel *fileSystemModel;
+    QTreeView *treeView;
     void displayObjects(QString l);
 };
 #endif // FILEWIZARDFRONTEND_H

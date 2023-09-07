@@ -1,6 +1,5 @@
 #include "filewizard-frontend.h"
-#include <QFont>
-#include <QMenu>
+//#include <QFont>
 #include <QMenuBar>
 #include <QActionGroup>
 #include <QLabel>
@@ -17,11 +16,13 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     omitButton(new QPushButton(this)),
     insertButton(new QPushButton(this)),
     dataField(new QLineEdit(this)),
-    informationWidget(new QTextEdit(this)),
     fileDialog(new QFileDialog(this, "Root Folder", QDir::currentPath())),
     data(new FileWizardBackEnd()),
     editModeBox(new QMessageBox(this)),
-    editOperationsDialog(new QDialog(this))
+    editOperationsDialog(new QDialog(this)),
+    informationWidget(new QTextEdit(this)),
+    fileSystemModel(new QFileSystemModel(this)),
+    treeView(new QTreeView(this))
 {
     // define/declare local objects.
     QLabel *heading, *programInstructions;
@@ -33,12 +34,13 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     setMinimumSize(800, 600);
     setFont(QFont("Helvetica", 10));
 
-    // define properties for the widgets.
+    // define properties for the child objects.
     heading->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     heading->setText("DO WHAT YOUR NORMAL\nFILE SYSTEM CANNOT DO.");
     heading->setAlignment(Qt::AlignCenter);
     fileDialog->setFileMode(QFileDialog::Directory);
-    informationWidget->setReadOnly(true);
+    fileSystemModel->setRootPath(QDir::currentPath());
+    treeView->setModel(fileSystemModel);
 
     // the sizes of the widgets
     folderButton->setMaximumSize(100, 30);
@@ -72,6 +74,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QBoxLayout *horizontalLayout1 = new QBoxLayout(QBoxLayout::LeftToRight, this);
     QBoxLayout *horizontalLayout2 = new QBoxLayout(QBoxLayout::LeftToRight, this);
     QBoxLayout *horizontalLayout3 = new QBoxLayout(QBoxLayout::LeftToRight, this);
+    QBoxLayout *horizontalLayout4 = new QBoxLayout(QBoxLayout::LeftToRight, this);
 
     horizontalLayout1->addSpacing(300);
     horizontalLayout1->addWidget(folderButton, Qt::AlignHCenter);
@@ -85,12 +88,15 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     horizontalLayout3->addWidget(editButton, Qt::AlignHCenter);
     horizontalLayout3->addSpacing(300);
 
+    horizontalLayout4->addWidget(treeView);
+    horizontalLayout4->addWidget(informationWidget);
+
     verticalLayout->addWidget(heading);
     verticalLayout->addWidget(programInstructions);
     verticalLayout->addLayout(horizontalLayout1);
     verticalLayout->addLayout(horizontalLayout2);
     verticalLayout->addLayout(horizontalLayout3);
-    verticalLayout->addWidget(informationWidget);
+    verticalLayout->addLayout(horizontalLayout4);
 
     centralWidget->setLayout(verticalLayout);
     setCentralWidget(centralWidget);
