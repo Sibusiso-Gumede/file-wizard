@@ -2,16 +2,16 @@
 #define FILEWIZARDFRONTEND_H
 
 #include <QMainWindow>
+#include <QWidget>
 #include <QAction>
 #include <QPushButton>
-#include <QLabel>
 #include <QFileDialog>
 #include <QLineEdit>
-#include <QMessageBox>
 #include <QDialog>
 #include <QTextEdit>
 #include <QFileSystemModel>
 #include <QTreeView>
+#include <QLabel>
 #include "filewizard-backend.h"
 
 class FileWizardFrontEnd : public QMainWindow
@@ -23,15 +23,15 @@ public:
 private slots:
     void handleAction(QAction *action = nullptr);
 private:
-    QPushButton *folderButton, *editButton, *omitButton, *insertButton;
+    QPushButton *folderButton, *editButton;
     QLineEdit *dataField;
     QFileDialog *fileDialog;
     FileWizardBackEnd *data;
-    QMessageBox *editModeBox;
     QDialog *editOperationsDialog;
     QTextEdit *informationWidget;
     QFileSystemModel *fileSystemModel;
     QTreeView *treeView;
+    QLabel *heading, *programInstructions;
     void displayObjects(QString l);
 };
 #endif // FILEWIZARDFRONTEND_H

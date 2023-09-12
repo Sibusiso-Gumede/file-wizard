@@ -2,8 +2,6 @@
 //#include <QFont>
 #include <QMenuBar>
 #include <QActionGroup>
-#include <QLabel>
-#include <QWidget>
 #include <QBoxLayout>
 #include <QDebug>
 
@@ -13,22 +11,16 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QMainWindow(parent),
     folderButton(new QPushButton("&Open Folder", this)),
     editButton(new QPushButton("&Edit", this)),
-    omitButton(new QPushButton(this)),
-    insertButton(new QPushButton(this)),
     dataField(new QLineEdit(this)),
     fileDialog(new QFileDialog(this, "Root Folder", QDir::currentPath())),
     data(new FileWizardBackEnd()),
-    editModeBox(new QMessageBox(this)),
     editOperationsDialog(new QDialog(this)),
     informationWidget(new QTextEdit(this)),
     fileSystemModel(new QFileSystemModel(this)),
-    treeView(new QTreeView(this))
+    treeView(new QTreeView(this)),
+    heading(new QLabel(this)),
+    programInstructions(new QLabel(this))
 {
-    // define/declare local objects.
-    QLabel *heading, *programInstructions;
-    heading = new QLabel(this);
-    programInstructions = new QLabel(this);
-
     // define properties for the main window.
     setWindowTitle("File Wizard");
     setMinimumSize(800, 600);
@@ -135,29 +127,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
         {
             if(action->text() == "&Rename")
             {
-                editModeBox->setText("Do you intend to omit"
-                                    " or insert a substring from the filenames?");
-                omitButton = editModeBox->addButton(tr("Omit"), QMessageBox::ActionRole);
-                insertButton = editModeBox->addButton(tr("Insert"), QMessageBox::ActionRole);
-                editModeBox->exec();
-                // TODO: Add a textcursor in the information widget.
-                if(omitButton == editModeBox->clickedButton())
-                {
-                    informationWidget->setReadOnly(false);
-                    informationWidget->setTextCursor();
-                }
 
-                else if(insertButton == editModeBox->clickedButton())
-                {
-
-                }
-
-                //foreach(QString filename, data->getObjects().split("\n"))
-                //{
-                //    QFileInfo info(data->getDirectory().absolutePath()
-                //                   + "/" + filename);
-
-                //}
             }
             else if(action->text() == "&Move")
             {
