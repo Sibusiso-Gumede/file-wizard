@@ -4,6 +4,7 @@
 #include <QActionGroup>
 #include <QBoxLayout>
 #include <QDebug>
+#include <QMessageBox>
 
 // function definitions of the filewizard-frontend class.
 
@@ -143,7 +144,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
     }
 
     else
-        editModeBox->information(this, "Missing Filter", "Please enter a keyword"
+        QMessageBox::information(0, "Missing Filter", "Please enter a keyword"
             " in step 2 to filter the objects you intend to modify.");
 }
 
