@@ -1,5 +1,4 @@
 #include "filewizard-frontend.h"
-//#include <QFont>
 #include <QMenuBar>
 #include <QActionGroup>
 #include <QBoxLayout>

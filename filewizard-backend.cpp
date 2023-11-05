@@ -7,9 +7,9 @@ FileWizardBackEnd::FileWizardBackEnd()
     objectsFound = false;
 }
 
-void FileWizardBackEnd::findObjects(QString dirName, QString f)
+void FileWizardBackEnd::findObjects(QString dirName, QString fileFilter)
 {           
-    if(f == NULL)
+    if(fileFilter == NULL)
     {
         rootDirectory = QDir(dirName);
         // list all objects, but exclude special entries.
@@ -21,7 +21,7 @@ void FileWizardBackEnd::findObjects(QString dirName, QString f)
     {
         qDebug() << "Executing find filtered objects block.";
 
-        filters << f;
+        filters << fileFilter;
         // find objects that match the filters.
         assignObjects(rootDirectory.entryList(filters, QDir::Dirs |
                     QDir::Files));
