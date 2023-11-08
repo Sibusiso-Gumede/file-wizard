@@ -9,8 +9,6 @@
 #include <QLineEdit>
 #include <QDialog>
 #include <QTextEdit>
-#include <QFileSystemModel>
-#include <QTreeView>
 #include <QLabel>
 #include "filewizard-backend.h"
 
@@ -29,8 +27,6 @@ private:
     FileWizardBackEnd *data;
     QDialog *editOperationsDialog;
     QTextEdit *informationWidget;
-    QFileSystemModel *fileSystemModel;
-    QTreeView *treeView;
     QLabel *heading, *programInstructions;
     void displayObjects(QString l);
 };

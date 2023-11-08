@@ -16,8 +16,6 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     data(new FileWizardBackEnd()),
     editOperationsDialog(new QDialog(this)),
     informationWidget(new QTextEdit(this)),
-    fileSystemModel(new QFileSystemModel(this)),
-    treeView(new QTreeView(this)),
     heading(new QLabel(this)),
     programInstructions(new QLabel(this))
 {
@@ -31,13 +29,11 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     heading->setText("DO WHAT YOUR NORMAL\nFILE SYSTEM CANNOT DO.");
     heading->setAlignment(Qt::AlignCenter);
     fileDialog->setFileMode(QFileDialog::Directory);
-    fileSystemModel->setRootPath(QDir::currentPath());
-    treeView->setModel(fileSystemModel);
 
     // the sizes of the widgets
     folderButton->setMaximumSize(100, 30);
     dataField->setMaximumSize(300, 30);
-    dataField->setPlaceholderText("*.zip/recipes.*/*.mp4");
+    dataField->setPlaceholderText("*.zip or recipes*.* or *.mp4");
     editButton->setMaximumSize(100, 30);
 
     // detailed program instructions for the user.
@@ -66,7 +62,6 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QBoxLayout *horizontalLayout1 = new QBoxLayout(QBoxLayout::LeftToRight, this);
     QBoxLayout *horizontalLayout2 = new QBoxLayout(QBoxLayout::LeftToRight, this);
     QBoxLayout *horizontalLayout3 = new QBoxLayout(QBoxLayout::LeftToRight, this);
-    QBoxLayout *horizontalLayout4 = new QBoxLayout(QBoxLayout::LeftToRight, this);
 
     horizontalLayout1->addSpacing(300);
     horizontalLayout1->addWidget(folderButton, Qt::AlignHCenter);
@@ -80,15 +75,12 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     horizontalLayout3->addWidget(editButton, Qt::AlignHCenter);
     horizontalLayout3->addSpacing(300);
 
-    horizontalLayout4->addWidget(treeView);
-    horizontalLayout4->addWidget(informationWidget);
-
     verticalLayout->addWidget(heading);
     verticalLayout->addWidget(programInstructions);
     verticalLayout->addLayout(horizontalLayout1);
     verticalLayout->addLayout(horizontalLayout2);
     verticalLayout->addLayout(horizontalLayout3);
-    verticalLayout->addLayout(horizontalLayout4);
+    verticalLayout->addWidget(informationWidget);
 
     centralWidget->setLayout(verticalLayout);
     setCentralWidget(centralWidget);
@@ -107,17 +99,14 @@ void FileWizardFrontEnd::handleAction(QAction* action)
     // When the folderButton is clicked, proceed to display
     // a file dialog and a list of objects found in the chosen
     // directory.
-
     if(action == nullptr)
     {
         data->findObjects(fileDialog->getExistingDirectory());
         displayObjects(data->getObjects());
     }
-
-    // Under the condition that there's a filter entered in the
+    // Otherwise, if there's a filter entered in the
     // dataField and objects are found in the root folder, proceed
     // to perform the chosen edit operation.
-
     else if(dataField->isModified())
     {
         data->findObjects(data->getRootDirectory().path(), dataField->text());
@@ -125,23 +114,21 @@ void FileWizardFrontEnd::handleAction(QAction* action)
 
         if(data->isObjectsFound())
         {
+            // If rename is chosen then enable editing in the information
+            // widget.
             if(action->text() == "&Rename")
             {
-
+                informationWidget->setReadOnly(false);
+                informationWidget->setUndoRedoEnabled(true);
+                informationWidget->selectAll();
             }
-            else if(action->text() == "&Move")
-            {
-                qDebug("Executing move block.");
-            }
-            else if(action->text() == "&Delete")
-            {
-            }
-            else if(action->text() == "&Copy")
-            {
-            }
+            else
+                data->performEditOperations(action->text());
         }
+        else
+            QMessageBox::information(0, "Information", "No files were found.");
     }
-
+    // Or just proceed to display an error message.
     else
         QMessageBox::information(0, "Missing Filter", "Please enter a keyword"
             " in step 2 to filter the objects you intend to modify.");
@@ -150,5 +137,6 @@ void FileWizardFrontEnd::handleAction(QAction* action)
 void FileWizardFrontEnd::displayObjects(QString objects)
 {
     // display objects on the QTextEdit widget.
+    informationWidget->setAlignment(Qt::AlignCenter);
     informationWidget->setPlainText(objects);
 }

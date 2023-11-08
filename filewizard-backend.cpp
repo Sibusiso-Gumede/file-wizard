@@ -8,7 +8,8 @@ FileWizardBackEnd::FileWizardBackEnd()
 }
 
 void FileWizardBackEnd::findObjects(QString dirName, QString fileFilter)
-{           
+{
+    objectsFound = false;
     if(fileFilter == NULL)
     {
         rootDirectory = QDir(dirName);
@@ -40,9 +41,16 @@ QDir FileWizardBackEnd::getRootDirectory() const
 
 void FileWizardBackEnd::performEditOperations(QString action)
 {
-
-
-
+    if(action == "&Move")
+    {
+        qDebug("Executing move block.");
+    }
+    else if(action == "&Delete")
+    {
+    }
+    else if(action == "&Copy")
+    {
+    }
 }
 
 bool FileWizardBackEnd::isObjectsFound() const
@@ -52,20 +60,17 @@ bool FileWizardBackEnd::isObjectsFound() const
 
 void FileWizardBackEnd::assignObjects(QStringList objectList)
 {
-    QString foundMsg("Objects found in the selected directory:"),
-            notFoundMsg("No file(s)/folder(s) were found "
-                        "in the selected directory:");
-
     if(!objectList.isEmpty())
     {
         objectsFound = true;
-        objectList.prepend(foundMsg);
+        objectList.prepend("Objects found in the selected directory:");
         objects = objectList.join("\n");
     }
 
     else
     {
         objectsFound = false;
-        objects = notFoundMsg;
+        objects = "No file(s)/folder(s) were found "
+                  "in the selected directory:";
     }
 }
