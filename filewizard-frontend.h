@@ -20,8 +20,9 @@ public:
     ~FileWizardFrontEnd();
 private slots:
     void handleAction(QAction *action = nullptr);
+    void renameObjects();
 private:
-    QPushButton *folderButton, *editButton;
+    QPushButton *folderButton, *editButton, *saveChangesButton;
     QLineEdit *dataField;
     QFileDialog *fileDialog;
     FileWizardBackEnd *data;

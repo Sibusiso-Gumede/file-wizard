@@ -11,6 +11,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QMainWindow(parent),
     folderButton(new QPushButton("&Open Folder", this)),
     editButton(new QPushButton("&Edit", this)),
+    saveChangesButton(new QPushButton("&Save Changes", this)),
     dataField(new QLineEdit(this)),
     fileDialog(new QFileDialog(this, "Root Folder", QDir::currentPath())),
     data(new FileWizardBackEnd()),
@@ -87,6 +88,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
 
     connect(folderButton, SIGNAL(clicked()), this, SLOT(handleAction()));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
+    connect(saveChangesButton, SIGNAL(clicked()), this, SLOT(renameObjects()));
 }
 
 FileWizardFrontEnd::~FileWizardFrontEnd()
