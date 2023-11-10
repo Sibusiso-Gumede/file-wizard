@@ -11,7 +11,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QMainWindow(parent),
     folderButton(new QPushButton("&Open Folder", this)),
     editButton(new QPushButton("&Edit", this)),
-    saveChangesButton(new QPushButton("&Save Changes", this)),
+    commitChangesButton(new QPushButton("&Save Changes", this)),
     dataField(new QLineEdit(this)),
     fileDialog(new QFileDialog(this, "Root Folder", QDir::currentPath())),
     data(new FileWizardBackEnd()),
@@ -36,6 +36,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     dataField->setMaximumSize(300, 30);
     dataField->setPlaceholderText("*.zip or recipes*.* or *.mp4");
     editButton->setMaximumSize(100, 30);
+    commitChangesButton->setMaximumSize(100, 30);
 
     // detailed program instructions for the user.
     programInstructions->setText("PROGRAM INSTRUCTIONS:\n"
@@ -82,13 +83,14 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     verticalLayout->addLayout(horizontalLayout2);
     verticalLayout->addLayout(horizontalLayout3);
     verticalLayout->addWidget(informationWidget);
+    verticalLayout->addWidget(commitChangesButton, Qt::AlignHCenter);
 
     centralWidget->setLayout(verticalLayout);
     setCentralWidget(centralWidget);
 
     connect(folderButton, SIGNAL(clicked()), this, SLOT(handleAction()));
     connect(editGroup, SIGNAL(triggered(QAction*)), this, SLOT(handleAction(QAction*)));
-    connect(saveChangesButton, SIGNAL(clicked()), this, SLOT(renameObjects()));
+    connect(commitChangesButton, SIGNAL(clicked()), this, SLOT(commitChanges()));
 }
 
 FileWizardFrontEnd::~FileWizardFrontEnd()
@@ -112,20 +114,25 @@ void FileWizardFrontEnd::handleAction(QAction* action)
     else if(dataField->isModified())
     {
         data->findObjects(data->getRootDirectory().path(), dataField->text());
-        displayObjects(data->getObjects());
-
         if(data->isObjectsFound())
         {
-            // If rename is chosen then enable editing in the information
-            // widget.
-            if(action->text() == "&Rename")
-            {
-                informationWidget->setReadOnly(false);
-                informationWidget->setUndoRedoEnabled(true);
-                informationWidget->selectAll();
-            }
-            else
-                data->performEditOperations(action->text());
+            QString operation = action->text(), substring;
+            data->setOperationMode(operation);
+
+            if(operation == "&Rename")
+                substring = "RENAMED";
+            else if(operation == "&Move")
+                substring = "MOVED";
+            else if(operation == "&Delete")
+                substring = "DELETED";
+            else if(operation == "&Copy")
+                substring = "COPIED";
+
+            displayObjects(QString("Object(s) to be %1:\n").arg(substring)+
+                           data->getObjects());
+            informationWidget->setReadOnly(false);
+            informationWidget->setUndoRedoEnabled(true);
+            informationWidget->selectAll();
         }
         else
             QMessageBox::information(0, "Information", "No files were found.");
@@ -141,4 +148,10 @@ void FileWizardFrontEnd::displayObjects(QString objects)
     // display objects on the QTextEdit widget.
     informationWidget->setAlignment(Qt::AlignCenter);
     informationWidget->setPlainText(objects);
+}
+
+void FileWizardFrontEnd::commitChanges()
+{
+    // Perform changes to the objects.
+
 }

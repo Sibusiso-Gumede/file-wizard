@@ -63,14 +63,23 @@ void FileWizardBackEnd::assignObjects(QStringList objectList)
     if(!objectList.isEmpty())
     {
         objectsFound = true;
-        objectList.prepend("Objects found in the selected directory:");
         objects = objectList.join("\n");
     }
 
     else
     {
         objectsFound = false;
-        objects = "No file(s)/folder(s) were found "
-                  "in the selected directory:";
+        //objects = "No file(s)/folder(s) were found "
+                  //"in the selected directory:";
     }
+}
+
+void FileWizardBackEnd::setOperationMode(QString op)
+{
+    operationMode = op;
+}
+
+QString FileWizardBackEnd::getOperationMode() const
+{
+    return operationMode;
 }
