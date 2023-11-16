@@ -10,7 +10,7 @@ class FileWizardBackEnd
 public:
     FileWizardBackEnd();
     void findObjects(QString dirName = NULL, QString f = NULL);
-    void performEditOperations(QString action);
+    void performEditOperations(QStringList objectNames);
     void setOperationMode(QString op);
     bool isObjectsFound() const;
     QString getObjects() const, getOperationMode() const;

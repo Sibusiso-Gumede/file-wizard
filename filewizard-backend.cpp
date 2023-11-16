@@ -39,17 +39,24 @@ QDir FileWizardBackEnd::getRootDirectory() const
     return rootDirectory;
 }
 
-void FileWizardBackEnd::performEditOperations(QString action)
+void FileWizardBackEnd::performEditOperations(QStringList objectNames)
 {
-    if(action == "&Move")
+    // Perform changes to the objects.
+    if(operationMode == "&Rename")
+    {
+
+    }
+    else if(operationMode == "&Move")
     {
         qDebug("Executing move block.");
     }
-    else if(action == "&Delete")
+    else if(operationMode == "&Delete")
     {
+
     }
-    else if(action == "&Copy")
+    else if(operationMode == "&Copy")
     {
+
     }
 }
 

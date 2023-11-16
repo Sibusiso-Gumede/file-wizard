@@ -152,6 +152,13 @@ void FileWizardFrontEnd::displayObjects(QString objects)
 
 void FileWizardFrontEnd::commitChanges()
 {
-    // Perform changes to the objects.
+    if(data->isObjectsFound())
+    {
+        QStringList objectNames = informationWidget->toPlainText().split("\n");
 
+        data->performEditOperations(objectNames);
+    }
+    else
+        QMessageBox::information(0, "Information", "Please select file(s) to"
+                                     " edit.");
 }
