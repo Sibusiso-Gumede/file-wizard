@@ -155,7 +155,7 @@ void FileWizardFrontEnd::commitChanges()
     if(data->isObjectsFound())
     {
         QStringList objectNames = informationWidget->toPlainText().split("\n");
-
+            
         data->performEditOperations(objectNames);
     }
     else
