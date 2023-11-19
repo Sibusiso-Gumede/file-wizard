@@ -7,14 +7,14 @@ FileWizardBackEnd::FileWizardBackEnd()
     objectsFound = false;
 }
 
-void FileWizardBackEnd::findObjects(QString dirName, QString fileFilter)
+void FileWizardBackEnd::findFiles(QString dirName, QString fileFilter)
 {
     objectsFound = false;
     if(fileFilter == NULL)
     {
-        rootDirectory = QDir(dirName);
+        directory = QDir(dirName);
         // list all objects, but exclude special entries.
-        assignObjects(rootDirectory.entryList(QDir::NoDotAndDotDot |
+        assignFiles(directory.entryList(QDir::NoDotAndDotDot |
                                          QDir::AllDirs | QDir::Files));
     }
 
@@ -24,27 +24,33 @@ void FileWizardBackEnd::findObjects(QString dirName, QString fileFilter)
 
         filters << fileFilter;
         // find objects that match the filters.
-        assignObjects(rootDirectory.entryList(filters, QDir::Dirs |
+        assignFiles(directory.entryList(filters, QDir::Dirs |
                     QDir::Files));
     }
 }
 
-QString FileWizardBackEnd::getObjects() const
+QString FileWizardBackEnd::getFiles() const
 {
-    return objects;
+    return originalFileNames;
 }
 
 QDir FileWizardBackEnd::getRootDirectory() const
 {
-    return rootDirectory;
+    return directory;
 }
 
-void FileWizardBackEnd::performEditOperations(QStringList objectNames)
+void FileWizardBackEnd::performEditOperations(QStringList files)
 {
-    // Perform changes to the objects.
+    // Perform changes to the files.
     if(operationMode == "&Rename")
     {
-
+        foreach(QString fileName, files)
+        {
+            QFileInfo info(directory.absolutePath() + "/" + fileName);
+            QString rawFileName = fileName.section(".", 0, 0);
+            QString newName = info.absoluteFilePath().section("/", 0, -2)
+                    + "/" + rawFileName;
+        }
     }
     else if(operationMode == "&Move")
     {
@@ -65,12 +71,12 @@ bool FileWizardBackEnd::isObjectsFound() const
     return objectsFound;
 }
 
-void FileWizardBackEnd::assignObjects(QStringList objectList)
+void FileWizardBackEnd::assignFiles(QStringList fileNames)
 {
-    if(!objectList.isEmpty())
+    if(!fileNames.isEmpty())
     {
         objectsFound = true;
-        objects = objectList.join("\n");
+        originalFileNames = fileNames.join("\n");
     }
 
     else

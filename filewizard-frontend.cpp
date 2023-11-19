@@ -105,15 +105,15 @@ void FileWizardFrontEnd::handleAction(QAction* action)
     // directory.
     if(action == nullptr)
     {
-        data->findObjects(fileDialog->getExistingDirectory());
-        displayObjects(data->getObjects());
+        data->findFiles(fileDialog->getExistingDirectory());
+        displayObjects(data->getFiles());
     }
     // Otherwise, if there's a filter entered in the
     // dataField and objects are found in the root folder, proceed
     // to perform the chosen edit operation.
     else if(dataField->isModified())
     {
-        data->findObjects(data->getRootDirectory().path(), dataField->text());
+        data->findFiles(data->getRootDirectory().path(), dataField->text());
         if(data->isObjectsFound())
         {
             QString operation = action->text(), substring;
@@ -129,7 +129,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
                 substring = "COPIED";
 
             displayObjects(QString("Object(s) to be %1:\n").arg(substring)+
-                           data->getObjects());
+                           data->getFiles());
             informationWidget->setReadOnly(false);
             informationWidget->setUndoRedoEnabled(true);
             informationWidget->selectAll();
@@ -155,7 +155,8 @@ void FileWizardFrontEnd::commitChanges()
     if(data->isObjectsFound())
     {
         QStringList objectNames = informationWidget->toPlainText().split("\n");
-            
+        // I think there has to be something here.
+        // but we'll get back to it later.
         data->performEditOperations(objectNames);
     }
     else
