@@ -114,7 +114,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
     else if(dataField->isModified())
     {
         data->findFiles(data->getRootDirectory().path(), dataField->text());
-        if(data->isObjectsFound())
+        if(data->isFilesFound())
         {
             QString operation = action->text(), substring;
             data->setOperationMode(operation);
@@ -152,7 +152,7 @@ void FileWizardFrontEnd::displayObjects(QString objects)
 
 void FileWizardFrontEnd::commitChanges()
 {
-    if(data->isObjectsFound())
+    if(data->isFilesFound())
     {
         QStringList objectNames = informationWidget->toPlainText().split("\n");
         // I think there has to be something here.

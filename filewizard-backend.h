@@ -12,13 +12,13 @@ public:
     void findFiles(QString dirName = NULL, QString f = NULL);
     void performEditOperations(QStringList files);
     void setOperationMode(QString op), setOriginalFileNames(QString names);
-    bool isObjectsFound() const;
+    bool isFilesFound() const;
     QString getFiles() const;
     QString getOperationMode() const;
     QDir getRootDirectory() const;
 
 private:
-    QStringList filters, changedObjects, failedObjects;
+    QStringList filters, changedfiles, failedFiles;
     QString operationMode, originalFileNames, newFileNames;
     QDir directory;
     bool objectsFound;

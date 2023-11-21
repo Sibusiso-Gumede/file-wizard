@@ -41,32 +41,36 @@ QDir FileWizardBackEnd::getRootDirectory() const
 
 void FileWizardBackEnd::performEditOperations(QStringList files)
 {
-    // Perform changes to the files.
-    if(operationMode == "&Rename")
+    if(originalFileNames.size() == files.size())
     {
+        int index = 0;
         foreach(QString fileName, files)
         {
-            QFileInfo info(directory.absolutePath() + "/" + fileName);
-            QString rawFileName = fileName.section(".", 0, 0);
-            QString newName = info.absoluteFilePath().section("/", 0, -2)
-                    + "/" + rawFileName;
+            QFileInfo info(directory.absolutePath() + "/" + originalFileNames);
+            // Perform changes to the files.
+            if(operationMode == "&Rename")
+            {
+                QString rawFileName = fileName.section(".", 0, 0);
+                QString newName = info.absoluteFilePath().section("/", 0, -2)
+                        + "/" + rawFileName;
+            }
+            else if(operationMode == "&Move")
+            {
+                qDebug("Executing move block.");
+            }
+            else if(operationMode == "&Delete")
+            {
+                qDebug("Executing delete block.");
+            }
+            else if(operationMode == "&Copy")
+            {
+                qDebug("Executing copy block.");
+            }
         }
-    }
-    else if(operationMode == "&Move")
-    {
-        qDebug("Executing move block.");
-    }
-    else if(operationMode == "&Delete")
-    {
-
-    }
-    else if(operationMode == "&Copy")
-    {
-
     }
 }
 
-bool FileWizardBackEnd::isObjectsFound() const
+bool FileWizardBackEnd::isFilesFound() const
 {
     return objectsFound;
 }
