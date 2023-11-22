@@ -1,5 +1,6 @@
 #include "filewizard-backend.h"
 #include <QFileInfo>
+#include <QFile>
 #include <QDebug>
 
 FileWizardBackEnd::FileWizardBackEnd()
@@ -17,7 +18,6 @@ void FileWizardBackEnd::findFiles(QString dirName, QString fileFilter)
         assignFiles(directory.entryList(QDir::NoDotAndDotDot |
                                          QDir::AllDirs | QDir::Files));
     }
-
     else
     {
         qDebug() << "Executing find filtered objects block.";
@@ -31,7 +31,7 @@ void FileWizardBackEnd::findFiles(QString dirName, QString fileFilter)
 
 QString FileWizardBackEnd::getFiles() const
 {
-    return originalFileNames;
+    return oldFileNames;
 }
 
 QDir FileWizardBackEnd::getRootDirectory() const
@@ -39,34 +39,47 @@ QDir FileWizardBackEnd::getRootDirectory() const
     return directory;
 }
 
-void FileWizardBackEnd::performEditOperations(QStringList files)
+void FileWizardBackEnd::performEditOperations(QStringList fileNames, QString destinationDir)
 {
-    if(originalFileNames.size() == files.size())
+    QDir destDirectory;
+
+    if(!destinationDir.isNull())
+        destDirectory = QDir(destinationDir);
+
+    int index = 0;
+    foreach(QString fileName, fileNames)
     {
-        int index = 0;
-        foreach(QString fileName, files)
+        if(destDirectory.exists())
         {
-            QFileInfo info(directory.absolutePath() + "/" + originalFileNames);
+            if(operationMode == "&Move")
+            {
+                QString ;
+            }
+            else if(operationMode == "&Copy")
+            {
+                QFileInfo destinationFile = QFileInfo(destDirectory, fileName);
+                QFile fileCopy();
+            }
+        }
+        else if(oldFileNames.size() == fileNames.size())
+        {
+            QFileInfo info(directory.absolutePath() + "/" + oldFileNames[index]);
             // Perform changes to the files.
             if(operationMode == "&Rename")
             {
-                QString rawFileName = fileName.section(".", 0, 0);
-                QString newName = info.absoluteFilePath().section("/", 0, -2)
-                        + "/" + rawFileName;
-            }
-            else if(operationMode == "&Move")
-            {
-                qDebug("Executing move block.");
+                QString newFileName = info.absoluteFilePath().section("/", 0, -2)
+                        + "/" + fileName;
+                if(directory.rename(info.absolutePath(), newFileName))
+                    changedFiles << info.absolutePath();
+                else
+                    failedFiles << info.absolutePath();
             }
             else if(operationMode == "&Delete")
             {
                 qDebug("Executing delete block.");
             }
-            else if(operationMode == "&Copy")
-            {
-                qDebug("Executing copy block.");
-            }
         }
+        index++;
     }
 }
 
@@ -80,7 +93,7 @@ void FileWizardBackEnd::assignFiles(QStringList fileNames)
     if(!fileNames.isEmpty())
     {
         objectsFound = true;
-        originalFileNames = fileNames.join("\n");
+        oldFileNames = fileNames.join("\n");
     }
 
     else

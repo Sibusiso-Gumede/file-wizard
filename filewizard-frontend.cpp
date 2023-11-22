@@ -154,10 +154,10 @@ void FileWizardFrontEnd::commitChanges()
 {
     if(data->isFilesFound())
     {
-        QStringList objectNames = informationWidget->toPlainText().split("\n");
+        QStringList fileNames = informationWidget->toPlainText().split("\n");
         // I think there has to be something here.
         // but we'll get back to it later.
-        data->performEditOperations(objectNames);
+        data->performEditOperations(fileNames);
     }
     else
         QMessageBox::information(0, "Information", "Please select file(s) to"
