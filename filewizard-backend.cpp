@@ -13,9 +13,11 @@ void FileWizardBackEnd::findFiles(QString dirName, QString fileFilter)
     objectsFound = false;
     if(fileFilter == NULL)
     {
-        directory = QDir(dirName);
+        qDebug() << "Executing list all root directory objects block.";
+
+        rootDirectory = QDir(dirName);
         // list all objects, but exclude special entries.
-        assignFiles(directory.entryList(QDir::NoDotAndDotDot |
+        assignFiles(rootDirectory.entryList(QDir::NoDotAndDotDot |
                                          QDir::AllDirs | QDir::Files));
     }
     else
@@ -24,7 +26,7 @@ void FileWizardBackEnd::findFiles(QString dirName, QString fileFilter)
 
         filters << fileFilter;
         // find objects that match the filters.
-        assignFiles(directory.entryList(filters, QDir::Dirs |
+        assignFiles(rootDirectory.entryList(filters, QDir::Dirs |
                     QDir::Files));
     }
 }
@@ -36,40 +38,58 @@ QString FileWizardBackEnd::getFiles() const
 
 QDir FileWizardBackEnd::getRootDirectory() const
 {
-    return directory;
+    return rootDirectory;
 }
 
-void FileWizardBackEnd::performEditOperations(QStringList fileNames, QString destinationDir)
+bool FileWizardBackEnd::performEditOperations(QStringList fileNames, QString destinationDir)
 {
-    QDir destDirectory;
-
-    if(!destinationDir.isNull())
-        destDirectory = QDir(destinationDir);
+    // if the chosen operation is successfully performed, the function will return true,
+    // otherwise it will return false.
 
     int index = 0;
-    foreach(QString fileName, fileNames)
+
+    if(operationMode == "&Move" || operationMode == "&Copy")
     {
-        if(destDirectory.exists())
+        qDebug() << "Executing move/copy block.";
+
+        if(!destinationDir.isEmpty())
         {
-            if(operationMode == "&Move")
+            destinationDirectory = QDir(destinationDir);
+            if(!destinationDirectory.exists())
+                destinationDirectory.mkpath(destinationDir);
+
+            foreach(QString fileName, fileNames)
             {
-                QString ;
+                if(operationMode == "&Move")
+                {
+
+                }
+                else if(operationMode == "&Copy")
+                {
+                    QFile file(rootDirectory.absoluteFilePath(fileName));
+                    file.copy(destinationDirectory.absolutePath()+fileName);
+                }
+                index++;
             }
-            else if(operationMode == "&Copy")
-            {
-                QFileInfo destinationFile = QFileInfo(destDirectory, fileName);
-                QFile fileCopy();
-            }
+            return true;
         }
-        else if(oldFileNames.size() == fileNames.size())
+        else
+            return false;
+    }
+
+    else if(oldFileNames.size() == fileNames.size())
+    {
+        qDebug() << "Executing rename/delete block.";
+
+        foreach(QString fileName, fileNames)
         {
-            QFileInfo info(directory.absolutePath() + "/" + oldFileNames[index]);
+            QFileInfo info(rootDirectory.absolutePath() + "/" + oldFileNames[index]);
             // Perform changes to the files.
             if(operationMode == "&Rename")
             {
                 QString newFileName = info.absoluteFilePath().section("/", 0, -2)
                         + "/" + fileName;
-                if(directory.rename(info.absolutePath(), newFileName))
+                if(rootDirectory.rename(info.absolutePath(), newFileName))
                     changedFiles << info.absolutePath();
                 else
                     failedFiles << info.absolutePath();
@@ -79,8 +99,11 @@ void FileWizardBackEnd::performEditOperations(QStringList fileNames, QString des
                 qDebug("Executing delete block.");
             }
         }
-        index++;
+        return true;
     }
+
+    else
+        return false;
 }
 
 bool FileWizardBackEnd::isFilesFound() const

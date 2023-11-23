@@ -10,7 +10,7 @@ class FileWizardBackEnd
 public:
     FileWizardBackEnd();
     void findFiles(QString dirName = NULL, QString f = NULL);
-    void performEditOperations(QStringList files, QString destinationDir = NULL);
+    bool performEditOperations(QStringList files, QString destinationDir = NULL);
     void setOperationMode(QString op), setOriginalFileNames(QString names);
     bool isFilesFound() const;
     QString getFiles() const;
@@ -20,7 +20,7 @@ public:
 private:
     QStringList filters, changedFiles, failedFiles;
     QString operationMode, oldFileNames, newFileNames;
-    QDir directory;
+    QDir rootDirectory, destinationDirectory;
     bool objectsFound;
     void assignFiles(QStringList fileNames);
 };
