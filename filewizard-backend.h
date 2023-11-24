@@ -16,7 +16,6 @@ public:
     QString getFiles() const;
     QString getOperationMode() const;
     QDir getRootDirectory() const;
-
 private:
     QStringList filters, changedFiles, failedFiles;
     QString operationMode, oldFileNames, newFileNames;

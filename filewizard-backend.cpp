@@ -66,8 +66,17 @@ bool FileWizardBackEnd::performEditOperations(QStringList fileNames, QString des
                 }
                 else if(operationMode == "&Copy")
                 {
+                    // create an object of the source file.
                     QFile file(rootDirectory.absoluteFilePath(fileName));
-                    file.copy(destinationDirectory.absolutePath()+fileName);
+                    // if the source file exists, copy it to chosen destination.
+                    if(file.exists())
+                    {
+                        file.copy(destinationDirectory.absolutePath()+fileName);
+                        changedFiles << fileName;
+                    }
+                    // else, add to the failed files list.
+                    else
+                        failedFiles << fileName;
                 }
                 index++;
             }
@@ -83,16 +92,16 @@ bool FileWizardBackEnd::performEditOperations(QStringList fileNames, QString des
 
         foreach(QString fileName, fileNames)
         {
-            QFileInfo info(rootDirectory.absolutePath() + "/" + oldFileNames[index]);
             // Perform changes to the files.
             if(operationMode == "&Rename")
             {
-                QString newFileName = info.absoluteFilePath().section("/", 0, -2)
-                        + "/" + fileName;
-                if(rootDirectory.rename(info.absolutePath(), newFileName))
-                    changedFiles << info.absolutePath();
+                QString oldFileName = static_cast<QChar>(oldFileNames[index]);
+                QString newFileName = rootDirectory.absolutePath() + "/" + fileName;
+
+                if(rootDirectory.rename(rootDirectory.absoluteFilePath(oldFileName), newFileName))
+                    changedFiles << ;
                 else
-                    failedFiles << info.absolutePath();
+                    failedFiles << ;
             }
             else if(operationMode == "&Delete")
             {
