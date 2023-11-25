@@ -43,10 +43,9 @@ QDir FileWizardBackEnd::getRootDirectory() const
 
 bool FileWizardBackEnd::performEditOperations(QStringList fileNames, QString destinationDir)
 {
-    // if the chosen operation is successfully performed, the function will return true,
+    // if the chosen operation is successfully performed, the function will return true(that
+    // is, in the scenario where atleast one file is successfully processed).
     // otherwise it will return false.
-
-    int index = 0;
 
     if(operationMode == "&Move" || operationMode == "&Copy")
     {
@@ -55,62 +54,79 @@ bool FileWizardBackEnd::performEditOperations(QStringList fileNames, QString des
         if(!destinationDir.isEmpty())
         {
             destinationDirectory = QDir(destinationDir);
+            // if the destination directory does not exist then construct it.
             if(!destinationDirectory.exists())
                 destinationDirectory.mkpath(destinationDir);
 
             foreach(QString fileName, fileNames)
             {
-                if(operationMode == "&Move")
+                // create an object of the source file.
+                QFile file(rootDirectory.absoluteFilePath(fileName));
+                // if the source file exists, copy it to chosen destination.
+                if(file.exists())
+                    file.copy(destinationDirectory.absolutePath()+fileName);
+                // else, add to the failed files list and continue to process
+                // the next file.
+                else
                 {
+                    failedFiles << fileName;
+                    continue;
+                }
 
-                }
-                else if(operationMode == "&Copy")
-                {
-                    // create an object of the source file.
-                    QFile file(rootDirectory.absoluteFilePath(fileName));
-                    // if the source file exists, copy it to chosen destination.
-                    if(file.exists())
-                    {
-                        file.copy(destinationDirectory.absolutePath()+fileName);
-                        changedFiles << fileName;
-                    }
-                    // else, add to the failed files list.
-                    else
-                        failedFiles << fileName;
-                }
-                index++;
+                // delete the source file if it's a move operation.
+                if(operationMode == "&Move")
+                    file.remove();
+                // add filename to the changed files list.
+                changedFiles << rootDirectory.absoluteFilePath(fileName);
             }
-            return true;
+            if(!changedFiles.isEmpty())
+                return true;
+            else
+                return false;
         }
         else
             return false;
     }
-
     else if(oldFileNames.size() == fileNames.size())
     {
         qDebug() << "Executing rename/delete block.";
 
+        bool operationSuccessful = false;
+        int index = 0;
+
         foreach(QString fileName, fileNames)
         {
-            // Perform changes to the files.
+            // rename/delete the file.
+            QString oldFileName = static_cast<QChar>(oldFileNames[index]);
             if(operationMode == "&Rename")
             {
-                QString oldFileName = static_cast<QChar>(oldFileNames[index]);
                 QString newFileName = rootDirectory.absolutePath() + "/" + fileName;
 
                 if(rootDirectory.rename(rootDirectory.absoluteFilePath(oldFileName), newFileName))
-                    changedFiles << ;
+                    operationSuccessful = true;
                 else
-                    failedFiles << ;
+                    operationSuccessful = false;
             }
             else if(operationMode == "&Delete")
             {
-                qDebug("Executing delete block.");
+                if(rootDirectory.remove(fileName))
+                    operationSuccessful = true;
+                else
+                    operationSuccessful = false;
             }
-        }
-        return true;
-    }
 
+            if(operationSuccessful)
+                changedFiles << rootDirectory.absoluteFilePath(oldFileName);
+            else
+                failedFiles << rootDirectory.absoluteFilePath(oldFileName);
+
+            index++;
+        }
+        if(!changedFiles.isEmpty())
+            return true;
+        else
+            return false;
+    }
     else
         return false;
 }
