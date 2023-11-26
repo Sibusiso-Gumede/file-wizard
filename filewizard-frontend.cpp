@@ -106,7 +106,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
     if(action == nullptr)
     {
         data->findFiles(fileDialog->getExistingDirectory());
-        displayObjects(data->getFiles());
+        displayInformation(data->getCurrentFiles());
     }
     // Otherwise, if there's a filter entered in the
     // dataField and objects are found in the root folder, proceed
@@ -116,7 +116,8 @@ void FileWizardFrontEnd::handleAction(QAction* action)
         data->findFiles(data->getRootDirectory().path(), dataField->text());
         if(data->isFilesFound())
         {
-            QString operation = action->text(), substring;
+            QString operation = action->text();
+            QString substring;
             data->setOperationMode(operation);
 
             if(operation == "&Rename")
@@ -128,8 +129,8 @@ void FileWizardFrontEnd::handleAction(QAction* action)
             else if(operation == "&Copy")
                 substring = "COPIED";
 
-            displayObjects(QString("Object(s) to be %1:\n").arg(substring)+
-                           data->getFiles());
+            displayInformation(QString("Object(s) to be %1:\n").arg(substring)+
+                           data->getCurrentFiles());
             informationWidget->setReadOnly(false);
             informationWidget->setUndoRedoEnabled(true);
             informationWidget->selectAll();
@@ -143,7 +144,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
             " in step 2 to filter the objects you intend to modify.");
 }
 
-void FileWizardFrontEnd::displayObjects(QString objects)
+void FileWizardFrontEnd::displayInformation(QString objects)
 {
     // display objects on the QTextEdit widget.
     informationWidget->setAlignment(Qt::AlignCenter);
@@ -154,10 +155,21 @@ void FileWizardFrontEnd::commitChanges()
 {
     if(data->isFilesFound())
     {
-        QStringList fileNames = informationWidget->toPlainText().split("\n");
-        // I think there has to be something here.
-        // but we'll get back to it later.
-        data->performEditOperations(fileNames);
+        data->setNewFileNames(informationWidget->toPlainText());
+        if(data->performEditOperations())
+        {
+            QString information;
+            information.append("File(s) successfully edited:\n"
+            +data->getChangedFiles()+"\n\n");
+            if(!data->getFailedFiles().isEmpty())
+            {
+                information.append(+"File(s) not successfully edited:"
+                                    "\n"+data->getFailedFiles());
+            }
+            displayInformation(information);
+        }
+        else
+            displayInformation("Edit operation not successful.");
     }
     else
         QMessageBox::information(0, "Information", "Please select file(s) to"

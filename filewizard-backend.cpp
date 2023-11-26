@@ -5,24 +5,24 @@
 
 FileWizardBackEnd::FileWizardBackEnd()
 {
-    objectsFound = false;
+    filesFound = false;
 }
 
 void FileWizardBackEnd::findFiles(QString dirName, QString fileFilter)
 {
-    objectsFound = false;
-    if(fileFilter == NULL)
+    filesFound = false;
+    if(fileFilter.isEmpty())
     {
-        qDebug() << "Executing list all root directory objects block.";
+        qDebug() << "Executing list all root directory file(s) block.";
 
         rootDirectory = QDir(dirName);
         // list all objects, but exclude special entries.
         assignFiles(rootDirectory.entryList(QDir::NoDotAndDotDot |
                                          QDir::AllDirs | QDir::Files));
     }
-    else
+    else if(!fileFilter.isEmpty())
     {
-        qDebug() << "Executing find filtered objects block.";
+        qDebug() << "Executing find filtered file(s) block.";
 
         filters << fileFilter;
         // find objects that match the filters.
@@ -31,9 +31,20 @@ void FileWizardBackEnd::findFiles(QString dirName, QString fileFilter)
     }
 }
 
-QString FileWizardBackEnd::getFiles() const
+void FileWizardBackEnd::assignFiles(QStringList fileNames)
 {
-    return oldFileNames;
+    if(!fileNames.isEmpty())
+    {
+        filesFound = true;
+        currentFileNames = fileNames.join("\n");
+    }
+    else
+        filesFound = false;
+}
+
+QString FileWizardBackEnd::getCurrentFiles() const
+{
+    return currentFileNames;
 }
 
 QDir FileWizardBackEnd::getRootDirectory() const
@@ -41,11 +52,15 @@ QDir FileWizardBackEnd::getRootDirectory() const
     return rootDirectory;
 }
 
-bool FileWizardBackEnd::performEditOperations(QStringList fileNames, QString destinationDir)
+bool FileWizardBackEnd::performEditOperations(QString destinationDir)
 {
+    qDebug() << "Executing performEditOperations function.";
+
     // if the chosen operation is successfully performed, the function will return true(that
     // is, in the scenario where atleast one file is successfully processed).
     // otherwise it will return false.
+
+    QStringList fileNames = newFileNames.split("\n");
 
     if(operationMode == "&Move" || operationMode == "&Copy")
     {
@@ -87,7 +102,7 @@ bool FileWizardBackEnd::performEditOperations(QStringList fileNames, QString des
         else
             return false;
     }
-    else if(oldFileNames.size() == fileNames.size())
+    else if(currentFileNames.split("\n").size() == fileNames.size())
     {
         qDebug() << "Executing rename/delete block.";
 
@@ -97,7 +112,7 @@ bool FileWizardBackEnd::performEditOperations(QStringList fileNames, QString des
         foreach(QString fileName, fileNames)
         {
             // rename/delete the file.
-            QString oldFileName = static_cast<QChar>(oldFileNames[index]);
+            QString oldFileName = currentFileNames.split("\n")[index];
             if(operationMode == "&Rename")
             {
                 QString newFileName = rootDirectory.absolutePath() + "/" + fileName;
@@ -133,24 +148,9 @@ bool FileWizardBackEnd::performEditOperations(QStringList fileNames, QString des
 
 bool FileWizardBackEnd::isFilesFound() const
 {
-    return objectsFound;
+    return filesFound;
 }
 
-void FileWizardBackEnd::assignFiles(QStringList fileNames)
-{
-    if(!fileNames.isEmpty())
-    {
-        objectsFound = true;
-        oldFileNames = fileNames.join("\n");
-    }
-
-    else
-    {
-        objectsFound = false;
-        //objects = "No file(s)/folder(s) were found "
-                  //"in the selected directory:";
-    }
-}
 
 void FileWizardBackEnd::setOperationMode(QString op)
 {
@@ -160,4 +160,21 @@ void FileWizardBackEnd::setOperationMode(QString op)
 QString FileWizardBackEnd::getOperationMode() const
 {
     return operationMode;
+}
+
+QString FileWizardBackEnd::getChangedFiles() const
+{
+    return changedFiles.join("\n");
+}
+
+QString FileWizardBackEnd::getFailedFiles() const
+{
+    return failedFiles.join("\n");
+}
+
+void FileWizardBackEnd::setNewFileNames(QString n)
+{
+    // only store the list of files and exclude the
+    // "File(s) to be editted" section.
+    newFileNames = n.section("\n", 1, -1);
 }

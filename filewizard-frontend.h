@@ -29,6 +29,6 @@ private:
     QDialog *editOperationsDialog;
     QTextEdit *informationWidget;
     QLabel *heading, *programInstructions;
-    void displayObjects(QString l);
+    void displayInformation(QString l);
 };
 #endif // FILEWIZARDFRONTEND_H
