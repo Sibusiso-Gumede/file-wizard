@@ -1,2 +1,21 @@
-# file-wizard
-A file management program that allows a user to move, rename, copy or delete multiple files or folders in a few clicks.
+# File-Wizard
+A file management program that allows a user to streamline their editing operations in a few clicks.
+
+## Table of Contents
+- Project Mockups
+- Framework
+
+## Project Mockups
+### Rename Functionality:
+
+Selected Files
+![Files_to_be_renamed](https://github.com/Sibusiso-Gumede/file-wizard/blob/master/resources/selected_videos_to_be_renamed.png)
+
+Renamed Files
+![Files_renamed](https://github.com/Sibusiso-Gumede/file-wizard/blob/master/resources/videos_renamed.png)
+
+Rename Output
+![Files_rename_output](https://github.com/Sibusiso-Gumede/file-wizard/blob/master/resources/rename_output.png)
+
+## Framework
+Qt Creator
