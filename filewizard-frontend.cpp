@@ -11,7 +11,7 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     QMainWindow(parent),
     folderButton(new QPushButton("&Open Folder", this)),
     editButton(new QPushButton("&Edit", this)),
-    commitChangesButton(new QPushButton("&Save Changes", this)),
+    commitChangesButton(new QPushButton("&Commit Changes", this)),
     dataField(new QLineEdit(this)),
     fileDialog(new QFileDialog(this, "Root Folder", QDir::currentPath())),
     data(new FileWizardBackEnd()),
@@ -166,10 +166,12 @@ void FileWizardFrontEnd::commitChanges()
                 information.append(+"File(s) not successfully edited:"
                                     "\n"+data->getFailedFiles());
             }
-            displayInformation(information);
+            displayInformation(information);            
         }
         else
             displayInformation("Edit operation not successful.");
+        // clear the filter and files list for the next operation.
+        data->clearLists();
     }
     else
         QMessageBox::information(0, "Information", "Please select file(s) to"

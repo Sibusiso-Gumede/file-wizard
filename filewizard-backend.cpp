@@ -106,9 +106,7 @@ bool FileWizardBackEnd::performEditOperations(QString destinationDir)
     {
         qDebug() << "Executing rename/delete block.";
 
-        bool operationSuccessful = false;
         int index = 0;
-
         foreach(QString fileName, fileNames)
         {
             // rename/delete the file.
@@ -118,25 +116,20 @@ bool FileWizardBackEnd::performEditOperations(QString destinationDir)
                 QString newFileName = rootDirectory.absolutePath() + "/" + fileName;
 
                 if(rootDirectory.rename(rootDirectory.absoluteFilePath(oldFileName), newFileName))
-                    operationSuccessful = true;
+                    changedFiles << rootDirectory.absoluteFilePath(oldFileName);
                 else
-                    operationSuccessful = false;
+                    failedFiles << rootDirectory.absoluteFilePath(oldFileName);
             }
             else if(operationMode == "&Delete")
             {
                 if(rootDirectory.remove(fileName))
-                    operationSuccessful = true;
+                    changedFiles << rootDirectory.absoluteFilePath(oldFileName);
                 else
-                    operationSuccessful = false;
+                    failedFiles << rootDirectory.absoluteFilePath(oldFileName);
             }
-
-            if(operationSuccessful)
-                changedFiles << rootDirectory.absoluteFilePath(oldFileName);
-            else
-                failedFiles << rootDirectory.absoluteFilePath(oldFileName);
-
             index++;
         }
+
         if(!changedFiles.isEmpty())
             return true;
         else
@@ -177,4 +170,11 @@ void FileWizardBackEnd::setNewFileNames(QString n)
     // only store the list of files and exclude the
     // "File(s) to be editted" section.
     newFileNames = n.section("\n", 1, -1);
+}
+
+void FileWizardBackEnd::clearLists()
+{
+    filters.clear();
+    changedFiles.clear();
+    failedFiles.clear();
 }

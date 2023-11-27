@@ -13,6 +13,7 @@ public:
     bool performEditOperations(QString destinationDir = NULL);
     void setOperationMode(QString op), setOriginalFileNames(QString names);
     void setNewFileNames(QString n);
+    void clearLists();
     bool isFilesFound() const;
     QString getCurrentFiles() const, getChangedFiles() const, getFailedFiles() const;
     QString getOperationMode() const;
