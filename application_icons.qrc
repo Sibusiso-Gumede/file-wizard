@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource>
+<file alias="icons/move.png">icons/o.png</file>
+<file alias="icons/rename.png">icons/r.png</file>
+<file alias="icons/delete.png">icons/x.png</file>
+<file alias="icons/copy.png">icons/c.png</file>
+</qresource>
+</RCC>

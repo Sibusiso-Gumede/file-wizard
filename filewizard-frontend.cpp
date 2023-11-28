@@ -13,7 +13,6 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     editButton(new QPushButton("&Edit", this)),
     commitChangesButton(new QPushButton("&Commit Changes", this)),
     dataField(new QLineEdit(this)),
-    fileDialog(new QFileDialog(this, "Root Folder", QDir::currentPath())),
     data(new FileWizardBackEnd()),
     editOperationsDialog(new QDialog(this)),
     informationWidget(new QTextEdit(this)),
@@ -29,7 +28,6 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
     heading->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     heading->setText("DO WHAT YOUR NORMAL\nFILE SYSTEM CANNOT DO.");
     heading->setAlignment(Qt::AlignCenter);
-    fileDialog->setFileMode(QFileDialog::Directory);
 
     // the sizes of the widgets
     folderButton->setMaximumSize(100, 30);
@@ -46,12 +44,12 @@ FileWizardFrontEnd::FileWizardFrontEnd(QWidget *parent) :
                     "\n   of the object names to filter them."
                     "\n3) Choose an edit option from the 'edit button'.\n");
 
-    // actions to rename, move or delete the object(s).
+    // actions to rename, move or delete the file(s).
     QActionGroup *editGroup = new QActionGroup(this);
-    editGroup->addAction(new QAction(QIcon("icons/r.png"), "&Rename", this));
-    editGroup->addAction(new QAction(QIcon("icons/a.png"), "&Move", this));
-    editGroup->addAction(new QAction(QIcon("icons/x.png"), "&Delete", this));
-    editGroup->addAction(new QAction(QIcon("icons/c.png"), "&Copy", this));
+    editGroup->addAction(new QAction(QIcon("icons/remove.png"), "&Rename", this));
+    editGroup->addAction(new QAction(QIcon("icons/move.png"), "&Move", this));
+    editGroup->addAction(new QAction(QIcon("icons/delete.png"), "&Delete", this));
+    editGroup->addAction(new QAction(QIcon("icons/copy.png"), "&Copy", this));
 
     // action menu to group the different edit options.
     QMenu* editMenu = new QMenu(this);
@@ -105,7 +103,8 @@ void FileWizardFrontEnd::handleAction(QAction* action)
     // directory.
     if(action == nullptr)
     {
-        data->findFiles(fileDialog->getExistingDirectory());
+        data->findFiles(QFileDialog::getExistingDirectory(0,
+                         "Root directory", QDir::currentPath()));
         displayInformation(data->getCurrentFiles());
     }
     // Otherwise, if there's a filter entered in the
@@ -122,13 +121,17 @@ void FileWizardFrontEnd::handleAction(QAction* action)
 
             if(operation == "&Rename")
                 substring = "RENAMED";
-            else if(operation == "&Move")
-                substring = "MOVED";
             else if(operation == "&Delete")
                 substring = "DELETED";
-            else if(operation == "&Copy")
-                substring = "COPIED";
-
+            else if(operation == "&Move" || operation == "&Copy")
+            {
+                if(operation == "&Move")
+                    substring = "MOVED";
+                else if(operation == "&Copy")
+                    substring = "COPIED";
+                data->setDestinationDirectory(QFileDialog::getExistingDirectory(
+                0, "Destination directory", data->getRootDirectory().absolutePath()));
+            }
             displayInformation(QString("Object(s) to be %1:\n").arg(substring)+
                            data->getCurrentFiles());
             informationWidget->setReadOnly(false);
@@ -141,7 +144,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
     // Or just proceed to display an error message.
     else
         QMessageBox::information(0, "Missing Filter", "Please enter a keyword"
-            " in step 2 to filter the objects you intend to modify.");
+            " in step 2 to filter the file(s) you intend to modify.");
 }
 
 void FileWizardFrontEnd::displayInformation(QString objects)
@@ -171,7 +174,7 @@ void FileWizardFrontEnd::commitChanges()
         else
             displayInformation("Edit operation not successful.");
         // clear the filter and files list for the next operation.
-        data->clearLists();
+        data->reset();
     }
     else
         QMessageBox::information(0, "Information", "Please select file(s) to"

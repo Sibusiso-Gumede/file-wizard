@@ -52,7 +52,7 @@ QDir FileWizardBackEnd::getRootDirectory() const
     return rootDirectory;
 }
 
-bool FileWizardBackEnd::performEditOperations(QString destinationDir)
+bool FileWizardBackEnd::performEditOperations()
 {
     qDebug() << "Executing performEditOperations function.";
 
@@ -66,13 +66,8 @@ bool FileWizardBackEnd::performEditOperations(QString destinationDir)
     {
         qDebug() << "Executing move/copy block.";
 
-        if(!destinationDir.isEmpty())
+        if(!destinationDirectory.isEmpty())
         {
-            destinationDirectory = QDir(destinationDir);
-            // if the destination directory does not exist then construct it.
-            if(!destinationDirectory.exists())
-                destinationDirectory.mkpath(destinationDir);
-
             foreach(QString fileName, fileNames)
             {
                 // create an object of the source file.
@@ -165,14 +160,14 @@ QString FileWizardBackEnd::getFailedFiles() const
     return failedFiles.join("\n");
 }
 
-void FileWizardBackEnd::setNewFileNames(QString n)
+void FileWizardBackEnd::setNewFileNames(QString name)
 {
     // only store the list of files and exclude the
     // "File(s) to be editted" section.
-    newFileNames = n.section("\n", 1, -1);
+    newFileNames = name.section("\n", 1, -1);
 }
 
-void FileWizardBackEnd::clearLists()
+void FileWizardBackEnd::reset()
 {
     filters.clear();
     changedFiles.clear();

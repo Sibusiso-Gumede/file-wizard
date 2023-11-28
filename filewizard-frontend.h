@@ -24,7 +24,6 @@ private slots:
 private:
     QPushButton *folderButton, *editButton, *commitChangesButton;
     QLineEdit *dataField;
-    QFileDialog *fileDialog;
     FileWizardBackEnd *data;
     QDialog *editOperationsDialog;
     QTextEdit *informationWidget;
