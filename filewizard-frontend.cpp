@@ -132,7 +132,7 @@ void FileWizardFrontEnd::handleAction(QAction* action)
                 data->setDestinationDirectory(QFileDialog::getExistingDirectory(
                 0, "Destination directory", data->getRootDirectory().absolutePath()));
             }
-            displayInformation(QString("Object(s) to be %1:\n").arg(substring)+
+            displayInformation(QString("File(s) to be %1:\n").arg(substring)+
                            data->getCurrentFiles());
             informationWidget->setReadOnly(false);
             informationWidget->setUndoRedoEnabled(true);
@@ -141,10 +141,6 @@ void FileWizardFrontEnd::handleAction(QAction* action)
         else
             QMessageBox::information(0, "Information", "No files were found.");
     }
-    // Or just proceed to display an error message.
-    else
-        QMessageBox::information(0, "Missing Filter", "Please enter a keyword"
-            " in step 2 to filter the file(s) you intend to modify.");
 }
 
 void FileWizardFrontEnd::displayInformation(QString objects)
@@ -173,7 +169,7 @@ void FileWizardFrontEnd::commitChanges()
         }
         else
             displayInformation("Edit operation not successful.");
-        // clear the filter and files list for the next operation.
+        // reset the data containers for the next operation.
         data->reset();
     }
     else

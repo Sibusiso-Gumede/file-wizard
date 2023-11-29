@@ -173,3 +173,8 @@ void FileWizardBackEnd::reset()
     changedFiles.clear();
     failedFiles.clear();
 }
+
+void FileWizardBackEnd::setDestinationDirectory(QString dir)
+{
+    destinationDirectory = QDir(dir);
+}
