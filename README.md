@@ -1,5 +1,5 @@
 # File-Wizard
-A file management program that allows a user to streamline their editing operations in a few clicks.
+A file management program that allows a user to streamline their editing operations with a few clicks.
 
 ## Table of Contents
 - Project Mockups
